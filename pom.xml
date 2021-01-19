@@ -45,6 +45,14 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<scope>compile</scope>
+		</dependency>
+
+
 		<dependency>
 			<groupId>io.projectreactor</groupId>
 			<artifactId>reactor-test</artifactId>
@@ -66,7 +74,29 @@
 					</excludes>
 				</configuration>
 			</plugin>
+
+			<plugin>
+				<groupId>org.flywaydb</groupId>
+				<artifactId>flyway-maven-plugin</artifactId>
+				<configuration>
+					<url>jdbc:postgresql://localhost:5432/postgres</url>
+					<user>postgres</user>
+					<password>postgres</password>
+					<schemas>todo</schemas>
+					<default-schema>todo</default-schema>
+					<locations>
+						<location>classpath:db/migration</location>
+					</locations>
+					<sqlMigrationPrefix>v</sqlMigrationPrefix>
+					<sqlMigrationSeparator>_</sqlMigrationSeparator>
+					<repeatableSqlMigrationPrefix>x</repeatableSqlMigrationPrefix>
+					<table>schema_version</table>
+					<group>true</group>
+					<mixed>true</mixed>
+				</configuration>
+			</plugin>
+
 		</plugins>
 	</build>
-
+	
 </project>
