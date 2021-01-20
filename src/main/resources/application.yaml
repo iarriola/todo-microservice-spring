@@ -27,3 +27,34 @@ spring:
     table: schema_version
     group: true
     mixed: true
+
+server:
+  port: 8080
+
+management:
+  server:
+    port: 8084
+    address: 0.0.0.0
+    ssl:
+      enabled: false
+  endpoints:
+    jmx:
+      exposure:
+        exclude: "*"
+    web:
+      exposure:
+        include: "*"
+      base-path: "/admin"
+      path-mapping:
+        health: "/readiness"
+        info: "/liveness"
+  endpoint:
+    info:
+      enabled: true
+    shutdown:
+      enabled: true
+    health:
+      show-details: always
+  health:
+    diskspace:
+      enabled: false
