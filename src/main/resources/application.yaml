@@ -11,23 +11,6 @@ spring:
       max-size: 2
       max-idle-time: 30m
 
-  flyway:
-    enabled: true
-    url: jdbc:postgresql://localhost:5432/postgres
-    user: postgres
-    password: postgres
-    default-schema: todo
-    schemas: 
-    - todo
-    locations:
-    - classpath:db/migration
-    sqlMigrationPrefix: v
-    repeatableSqlMigrationPrefix: x
-    sqlMigrationSeparator: _
-    table: schema_version
-    group: true
-    mixed: true
-
 server:
   port: 8080
 
