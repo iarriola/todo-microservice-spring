@@ -1,12 +1,14 @@
 spring:
+  main:
+    banner-mode: off
   r2dbc:
     url: r2dbc:postgresql://localhost:5432/postgres
     username: postgres
     password: postgres
     pool:
       enabled: true
-      initial-size: 10
-      max-size: 16
+      initial-size: 1
+      max-size: 2
       max-idle-time: 30m
 
   flyway:
