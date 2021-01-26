@@ -6,7 +6,7 @@ import com.incode.todo.models.TaskPost;
 import com.incode.todo.repositories.entities.TaskEntity;
 import java.util.UUID;
 
-public class TaskMapper {
+public class MapperUtils {
   public static Task toModel(TaskEntity entity) {
     return Task.builder()
         .id(entity.getUuid())
@@ -26,10 +26,10 @@ public class TaskMapper {
   }
 
   public static TaskEntity patchEntity(TaskEntity entity, TaskPatch model) {
-    ObjectsCustom.applyObjectChange(model.getTitle(), entity.getTitle())
+    ObjectsUtils.applyObjectChange(model.getTitle(), entity.getTitle())
         .ifPresent(entity::setTitle);
 
-    ObjectsCustom.applyObjectChange(model.getDescription(), entity.getDescription())
+    ObjectsUtils.applyObjectChange(model.getDescription(), entity.getDescription())
         .ifPresent(entity::setTitle);
 
     return entity;

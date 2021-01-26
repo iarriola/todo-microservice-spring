@@ -5,11 +5,11 @@ import java.util.Optional;
 import java.util.stream.Stream;
 import org.springframework.util.ObjectUtils;
 
-public class ObjectsCustom {
+public class ObjectsUtils {
   public static <T> Optional<T> applyObjectChange(T value, T defaultValue) {
     return Stream.of(value, defaultValue)
         .filter(Objects::nonNull)
-        .filter(ObjectsCustom::nonEmpty)
+        .filter(ObjectsUtils::nonEmpty)
         .findFirst();
   }
 

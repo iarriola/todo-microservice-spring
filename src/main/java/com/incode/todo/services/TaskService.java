@@ -4,7 +4,7 @@ import com.incode.todo.models.Task;
 import com.incode.todo.models.TaskPatch;
 import com.incode.todo.models.TaskPost;
 import com.incode.todo.repositories.TaskRepository;
-import com.incode.todo.utils.TaskMapper;
+import com.incode.todo.utils.MapperUtils;
 import java.util.Objects;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -19,26 +19,26 @@ public class TaskService {
   private final TaskRepository repository;
 
   public Flux<Task> getAllTasks() {
-    return repository.findAll().map(TaskMapper::toModel);
+    return repository.findAll().map(MapperUtils::toModel);
   }
 
-  public Mono<Task> getTask(UUID id) {
-    return repository.findById(id).map(TaskMapper::toModel);
+  public Mono<Task> getTask(String id) {
+    return repository.findById(UUID.fromString(id)).map(MapperUtils::toModel);
   }
 
   public Mono<Task> createTask(TaskPost model) {
-    return repository.save(TaskMapper.toEntity(model)).map(TaskMapper::toModel);
+    return repository.save(MapperUtils.toEntity(model)).map(MapperUtils::toModel);
   }
 
-  public Mono<Task> updateTask(UUID id, TaskPatch model) {
+  public Mono<Task> updateTask(String id, TaskPatch model) {
     return repository
-        .findById(id)
+        .findById(UUID.fromString(id))
         .filter(Objects::nonNull)
-        .map(entity -> TaskMapper.patchEntity(entity, model))
-        .flatMap(entity -> repository.save(entity).map(TaskMapper::toModel));
+        .map(entity -> MapperUtils.patchEntity(entity, model))
+        .flatMap(entity -> repository.save(entity).map(MapperUtils::toModel));
   }
 
   public Mono<Void> removeTask(UUID id) {
-    return repository.delete(TaskMapper.toEntity(id));
+    return repository.delete(MapperUtils.toEntity(id));
   }
 }
