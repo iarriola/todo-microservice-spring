@@ -3,7 +3,6 @@ package com.incode.todo.utils;
 import com.incode.todo.models.AppErrorType;
 import com.incode.todo.models.AppException;
 import com.incode.todo.models.AppResponse;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.util.StringUtils;
@@ -17,9 +16,14 @@ import reactor.core.publisher.Mono;
 public class HttpUtils {
 
   public static Mono<ServerResponse> okResponse(Object obj) {
+    LoggerUtils.logger(HttpUtils.class).error(obj.getClass().getName());
     return ServerResponse.ok()
-        .contentType(MediaType.APPLICATION_JSON)
-        .body(BodyInserters.fromValue(obj));
+            .contentType(MediaType.APPLICATION_JSON)
+            .body(BodyInserters.fromValue(obj));
+  }
+
+  public static Mono<ServerResponse> noContentResponse(Object obj) {
+    return ServerResponse.noContent().build();
   }
 
   public static Mono<ServerResponse> notFoundResponse(String message) {
@@ -29,11 +33,20 @@ public class HttpUtils {
     );
   }
 
+  public static Mono<ServerResponse> badRequestResponse(String message) {
+    return httpResponse(
+      AppErrorType.BAD_REQUEST.getStatus(),
+      StringUtils.hasText(message) ? message : AppErrorType.BAD_REQUEST.getMessage()
+    );
+  }
+
   public static Mono<ServerResponse> handleError(Throwable t) {
     return normalize(t).flatMap(HttpUtils::httpResponse);
   }
 
   private static Mono<AppException> normalize(Throwable t) {
+
+    LoggerUtils.logger(HttpUtils.class).error(t.getMessage(), t);
 
     if(t instanceof AppException) {
       return Mono.just((AppException) t);
@@ -53,7 +66,7 @@ public class HttpUtils {
   }
 
   private static Mono<ServerResponse> httpResponse(AppException exception) {
-      return httpResponse(exception.status(), exception.getLocalizedMessage());
+      return httpResponse(exception.status(), exception.getMessage());
   }
 
   private static Mono<ServerResponse> httpResponse(HttpStatus status, String message) {

@@ -1,0 +1,30 @@
+GET /api/v1/tasks HTTP/1.1
+Host: localhost:8080
+
+###
+
+GET /api/v1/tasks/846cba17-06da-4c63-9d61-23f729f75f13 HTTP/1.1
+Host: localhost:8080
+
+###
+# @name liveness
+GET /admin/liveness HTTP/1.1
+Host: localhost:8084
+
+###
+# @name readiness
+GET /admin/readiness HTTP/1.1
+Host: localhost:8084
+
+###
+# @name create-task
+
+POST /api/v1/tasks HTTP/1.1
+Host: localhost:8080
+Content-Type: application/json
+Content-Length: 85
+
+{
+    "title": "API request title",
+    "description": "API request description"
+}

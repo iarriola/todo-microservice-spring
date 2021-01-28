@@ -1,7 +1,9 @@
 package com.incode.todo.api;
 
-public interface Routes {
-  String TASKS = "/todo/v1/tasks";
+public interface ApiRoutes {
+  String TASKS = "/api/v1/tasks";
+
+  String TASK = "/api/v1/tasks/{id}";
 
   String ADMIN = "/admin";
 

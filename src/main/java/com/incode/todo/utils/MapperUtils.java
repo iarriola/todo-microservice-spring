@@ -4,6 +4,8 @@ import com.incode.todo.models.Task;
 import com.incode.todo.models.TaskPatch;
 import com.incode.todo.models.TaskPost;
 import com.incode.todo.repositories.entities.TaskEntity;
+
+import java.util.List;
 import java.util.UUID;
 
 public class MapperUtils {
@@ -15,6 +17,18 @@ public class MapperUtils {
         .completedAt(entity.getCompletedAt())
         .deletedAt(entity.getDeletedAt())
         .build();
+  }
+
+  public static List<Task> toListModel(TaskEntity entity) {
+    return List.of(
+      Task.builder()
+        .id(entity.getUuid())
+        .title(entity.getTitle())
+        .createdAt(entity.getCreatedAt())
+        .completedAt(entity.getCompletedAt())
+        .deletedAt(entity.getDeletedAt())
+        .build()
+    );
   }
 
   public static TaskEntity toEntity(TaskPost model) {
