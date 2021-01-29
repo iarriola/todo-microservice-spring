@@ -2,8 +2,20 @@ GET /api/v1/tasks HTTP/1.1
 Host: localhost:8080
 
 ###
+# @name create-task
 
-GET /api/v1/tasks/846cba17-06da-4c63-9d61-23f729f75f13 HTTP/1.1
+POST /api/v1/tasks HTTP/1.1
+Host: localhost:8080
+Content-Type: application/json
+
+{
+    "title": "API request title",
+    "description": "API request description"
+}
+
+###
+
+GET /api/v1/tasks/7cb19f48-aa32-4058-b0dd-3a0c69b2d781 HTTP/1.1
 Host: localhost:8080
 
 ###
@@ -15,16 +27,3 @@ Host: localhost:8084
 # @name readiness
 GET /admin/readiness HTTP/1.1
 Host: localhost:8084
-
-###
-# @name create-task
-
-POST /api/v1/tasks HTTP/1.1
-Host: localhost:8080
-Content-Type: application/json
-Content-Length: 85
-
-{
-    "title": "API request title",
-    "description": "API request description"
-}

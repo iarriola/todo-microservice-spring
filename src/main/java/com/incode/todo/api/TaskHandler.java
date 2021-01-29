@@ -28,13 +28,13 @@ public class TaskHandler {
     return service
       .getTask(request.pathVariable("id"))
       .flatMap(HttpUtils::okResponse)
+      .switchIfEmpty(HttpUtils.notFoundResponse("Unable to find task"))
       .onErrorResume(HttpUtils::handleError);
   }
 
   public Mono<ServerResponse> post(ServerRequest request) {
-
-    Mono<TaskPost> taskPost = request.bodyToMono(TaskPost.class);
-    return taskPost
+    return request
+      .bodyToMono(TaskPost.class)
       .map(post -> service.createTask(post))
       .flatMap(HttpUtils::okResponse)
       .switchIfEmpty(HttpUtils.badRequestResponse("Please provide a valid task"))
@@ -45,6 +45,7 @@ public class TaskHandler {
     return service
       .removeTask(request.pathVariable("id"))
       .flatMap(HttpUtils::noContentResponse)
+      .switchIfEmpty(HttpUtils.notFoundResponse("Unable to find task"))
       .onErrorResume(HttpUtils::handleError);
   }
 
@@ -53,7 +54,7 @@ public class TaskHandler {
       .bodyToMono(TaskPatch.class)
       .map(patch -> service.updateTask(request.pathVariable("id"), patch))
       .flatMap(HttpUtils::okResponse)
-      .switchIfEmpty(HttpUtils.badRequestResponse("Please provide a valid task"))
+      .switchIfEmpty(HttpUtils.notFoundResponse("Unable to find task"))//.switchIfEmpty(HttpUtils.badRequestResponse("Please provide a valid task"))
       .onErrorResume(HttpUtils::handleError);
   }
 }

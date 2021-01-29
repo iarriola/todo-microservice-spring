@@ -5,6 +5,7 @@ import com.incode.todo.models.TaskPatch;
 import com.incode.todo.models.TaskPost;
 import com.incode.todo.repositories.entities.TaskEntity;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -32,7 +33,13 @@ public class MapperUtils {
   }
 
   public static TaskEntity toEntity(TaskPost model) {
-    return TaskEntity.builder().title(model.getTitle()).description(model.getDescription()).build();
+    return TaskEntity
+      .builder()
+      .uuid(UUID.randomUUID())
+      .title(model.getTitle())
+      .description(model.getDescription())
+      .createdAt(ZonedDateTime.now())
+      .build();
   }
 
   public static TaskEntity toEntity(UUID id) {

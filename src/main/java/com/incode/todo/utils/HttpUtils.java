@@ -16,7 +16,7 @@ import reactor.core.publisher.Mono;
 public class HttpUtils {
 
   public static Mono<ServerResponse> okResponse(Object obj) {
-    LoggerUtils.logger(HttpUtils.class).error(obj.getClass().getName());
+    LoggerUtils.logger(HttpUtils.class).info(obj.getClass().getName());
     return ServerResponse.ok()
             .contentType(MediaType.APPLICATION_JSON)
             .body(BodyInserters.fromValue(obj));
@@ -80,7 +80,7 @@ public class HttpUtils {
   private static AppResponse responseBody(HttpStatus status, String message) {
     return AppResponse
       .builder()
-      .status(status.toString())
+      .status(status.value() + " " + status.getReasonPhrase())
       .message(message)
       .build();
   }
