@@ -33,7 +33,7 @@ public class TaskHandler {
 
   public Mono<ServerResponse> post(ServerRequest request) {
 
-    Mono<TaskPost> taskPost = request.bodyToMono(TaskPost.class).single();
+    Mono<TaskPost> taskPost = request.bodyToMono(TaskPost.class);
     return taskPost
       .map(post -> service.createTask(post))
       .flatMap(HttpUtils::okResponse)
