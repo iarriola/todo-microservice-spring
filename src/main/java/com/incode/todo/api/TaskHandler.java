@@ -35,7 +35,7 @@ public class TaskHandler {
   public Mono<ServerResponse> post(ServerRequest request) {
     return request
       .bodyToMono(TaskPost.class)
-      .map(post -> service.createTask(post))
+      .flatMap(post -> service.createTask(post))
       .flatMap(HttpUtils::okResponse)
       .switchIfEmpty(HttpUtils.badRequestResponse("Please provide a valid task"))
       .onErrorResume(HttpUtils::handleError);

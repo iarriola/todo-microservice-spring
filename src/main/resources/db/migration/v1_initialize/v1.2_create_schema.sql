@@ -23,8 +23,8 @@ create table task (
     id smallserial primary key,
     uuid uuid not null default uuid_generate_v4(),
     title varchar(100) not null,
-    description text null,
-    created_at timestamptz not null default now(),
+    description text not null,
+    created_at timestamptz not null default current_timestamp,
     completed_at timestamptz null default null,
     deleted_at timestamptz null default null
 );

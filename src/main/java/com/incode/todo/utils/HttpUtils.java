@@ -3,6 +3,8 @@ package com.incode.todo.utils;
 import com.incode.todo.models.AppErrorType;
 import com.incode.todo.models.AppException;
 import com.incode.todo.models.AppResponse;
+
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.util.StringUtils;
@@ -16,7 +18,6 @@ import reactor.core.publisher.Mono;
 public class HttpUtils {
 
   public static Mono<ServerResponse> okResponse(Object obj) {
-    LoggerUtils.logger(HttpUtils.class).info(obj.getClass().getName());
     return ServerResponse.ok()
             .contentType(MediaType.APPLICATION_JSON)
             .body(BodyInserters.fromValue(obj));
@@ -62,7 +63,11 @@ public class HttpUtils {
       return Mono.just(new AppException(AppErrorType.BAD_REQUEST, e.getMessage()));
     }
 
-    return Mono.just(new AppException(AppErrorType.INTERNAL_ERROR));
+    if(t instanceof DataAccessException) {
+      return Mono.just(new AppException(AppErrorType.SERVICE_UNAVAILABLE, "Storage error"));
+    }
+
+    return Mono.just(new AppException(AppErrorType.INTERNAL_ERROR, t.getMessage()));
   }
 
   private static Mono<ServerResponse> httpResponse(AppException exception) {
