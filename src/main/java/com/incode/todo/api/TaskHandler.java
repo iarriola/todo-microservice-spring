@@ -54,7 +54,7 @@ public class TaskHandler {
       .bodyToMono(TaskPatch.class)
       .map(patch -> service.updateTask(request.pathVariable("id"), patch))
       .flatMap(HttpUtils::okResponse)
-      .switchIfEmpty(HttpUtils.notFoundResponse("Unable to find task"))//.switchIfEmpty(HttpUtils.badRequestResponse("Please provide a valid task"))
+      .switchIfEmpty(HttpUtils.notFoundResponse("Unable to find task"))
       .onErrorResume(HttpUtils::handleError);
   }
 }
