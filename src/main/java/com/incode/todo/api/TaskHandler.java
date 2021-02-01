@@ -4,6 +4,8 @@ import com.incode.todo.models.TaskPatch;
 import com.incode.todo.models.TaskPost;
 import com.incode.todo.services.TaskService;
 import com.incode.todo.utils.HttpUtils;
+import com.incode.todo.utils.ValidatorUtils;
+
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Component;
@@ -15,7 +17,10 @@ import reactor.core.publisher.Mono;
 @Component
 @RequiredArgsConstructor
 public class TaskHandler {
+
   private final TaskService service;
+
+  private final ValidatorUtils validator;
 
   public Mono<ServerResponse> getAll(ServerRequest request) {
     return service
@@ -35,9 +40,11 @@ public class TaskHandler {
   public Mono<ServerResponse> post(ServerRequest request) {
     return request
       .bodyToMono(TaskPost.class)
-      .flatMap(post -> service.createTask(post))
+      //.flatMap(task -> service.createTask(task))
+      .flatMap(task -> HttpUtils.validate(task, validator))
+      .flatMap(task -> service.createTask(task))
       .flatMap(HttpUtils::okResponse)
-      .switchIfEmpty(HttpUtils.badRequestResponse("Please provide a valid task"))
+      //.switchIfEmpty(HttpUtils.badRequestResponse("Please provide a valid task"))
       .onErrorResume(HttpUtils::handleError);
   }
 

@@ -11,6 +11,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 import org.springframework.web.reactive.function.server.ServerResponse;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.server.ServerWebInputException;
 
 import reactor.core.publisher.Mono;
@@ -41,33 +42,48 @@ public class HttpUtils {
     );
   }
 
-  public static Mono<ServerResponse> handleError(Throwable t) {
-    return normalize(t).flatMap(HttpUtils::httpResponse);
+  public static Mono<ServerResponse> handleError(Throwable throwable) {
+    return normalize(throwable).flatMap(HttpUtils::httpResponse);
   }
 
-  private static Mono<AppException> normalize(Throwable t) {
+  private static Mono<AppException> normalize(Throwable throwable) {
 
-    LoggerUtils.logger(HttpUtils.class).error(t.getMessage(), t);
+    AppException exception = null;
 
-    if(t instanceof AppException) {
-      return Mono.just((AppException) t);
+    if(throwable instanceof AppException) {
+      exception = (AppException) throwable;
     }
 
-    if(t instanceof WebClientResponseException) {
-      WebClientResponseException e = (WebClientResponseException) t;
-      return Mono.just(new AppException(e.getStatusCode(), e.getMessage()));
+    if (throwable instanceof ResponseStatusException) {
+      ResponseStatusException e = (ResponseStatusException) throwable;
+      exception = new AppException(e.getStatus(), e.getMessage());
     }
 
-    if(t instanceof ServerWebInputException) {
-      ServerWebInputException e = (ServerWebInputException) t;
-      return Mono.just(new AppException(AppErrorType.BAD_REQUEST, e.getMessage()));
+    if(throwable instanceof WebClientResponseException) {
+      WebClientResponseException e = (WebClientResponseException) throwable;
+      exception = new AppException(e.getStatusCode(), e.getMessage());
     }
 
-    if(t instanceof DataAccessException) {
-      return Mono.just(new AppException(AppErrorType.SERVICE_UNAVAILABLE, "Storage error"));
+    if(throwable instanceof ServerWebInputException) {
+      ServerWebInputException e = (ServerWebInputException) throwable;
+      exception = new AppException(AppErrorType.BAD_REQUEST, e.getMessage());
     }
 
-    return Mono.just(new AppException(AppErrorType.INTERNAL_ERROR, t.getMessage()));
+    if(throwable instanceof DataAccessException) {
+      exception = new AppException(AppErrorType.SERVICE_UNAVAILABLE, "Storage error");
+    }
+
+    if(exception == null) {
+      exception = new AppException(AppErrorType.INTERNAL_ERROR, throwable.getMessage());
+    }
+
+    if(exception.status().value() == HttpStatus.BAD_REQUEST.value()) {
+      LoggerUtils.logger(HttpUtils.class).debug("message={}", exception.getMessage());
+    } else {
+      LoggerUtils.logger(HttpUtils.class).error(exception.getMessage(), exception);
+    }
+
+    return Mono.just(exception);
   }
 
   private static Mono<ServerResponse> httpResponse(AppException exception) {
@@ -88,6 +104,10 @@ public class HttpUtils {
       .status(status.value() + " " + status.getReasonPhrase())
       .message(message)
       .build();
+  }
+
+  public static <T> Mono<T> validate(T model, ValidatorUtils validator) {
+    return validator.validate(model);
   }
 
 }

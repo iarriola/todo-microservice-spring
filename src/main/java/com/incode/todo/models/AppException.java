@@ -1,5 +1,7 @@
 package com.incode.todo.models;
 
+import java.util.function.BiFunction;
+
 import org.springframework.http.HttpStatus;
 
 public class AppException extends RuntimeException {
@@ -15,7 +17,7 @@ public class AppException extends RuntimeException {
     }
 
     public AppException(final String code, final HttpStatus status, String... pairs) {
-        super(pairs.length == 0 ? status.getReasonPhrase() : status.getReasonPhrase() + flatten(pairs));
+        super(pairs.length == 0 ? status.getReasonPhrase() : flatten(pairs));
         this.code = code;
         this.status = status;
     }
@@ -27,7 +29,7 @@ public class AppException extends RuntimeException {
     }
 
     public AppException(final HttpStatus status, String... pairs) {
-        super(pairs.length == 0 ? status.getReasonPhrase() : status.getReasonPhrase() + flatten(pairs));
+        super(pairs.length == 0 ? status.getReasonPhrase() : flatten(pairs));
         this.code = status.name();
         this.status = status;
     }
@@ -45,14 +47,14 @@ public class AppException extends RuntimeException {
         int i = 0;
         for (final String item : pairs) {
             if (i % 2 == 0) {
-                builder.append(" [").append(item);
+                builder.append(" ").append(item);
             } else {
-                builder.append("=").append(item).append("]");
+                builder.append("=").append(item);
             }
             i++;
         }
-        final String out = builder.toString();
-        return out.endsWith("]") ? out : out + "]";
+        final String out = builder.toString().trim();
+        return out;//.endsWith("]") ? out : out + "]";
     }
 
 }

@@ -30,15 +30,18 @@ public class TaskService {
   }
 
   public Mono<List<Task>> createTask(TaskPost model) {
-    return repository.save(MapperUtils.toEntity(model)).map(MapperUtils::toListModel);
+    return repository
+      .save(MapperUtils.toEntity(model))
+      .map(MapperUtils::toListModel);
   }
 
   public Mono<List<Task>> updateTask(String id, TaskPatch model) {
     return repository
-        .findById(UUID.fromString(id))
-        .filter(Objects::nonNull)
-        .map(entity -> MapperUtils.patchEntity(entity, model))
-        .flatMap(entity -> repository.save(entity).map(MapperUtils::toListModel));
+      .findById(UUID.fromString(id))
+      .filter(Objects::nonNull)
+      .map(entity -> MapperUtils.patchEntity(entity, model))
+      .switchIfEmpty(Mono.empty())
+      .flatMap(entity -> repository.save(entity).map(MapperUtils::toListModel));
   }
 
   public Mono<Void> removeTask(String id) {

@@ -20,10 +20,9 @@ public class LoggerUtils {
   public static BiFunction<ServerRequest, ServerResponse, ServerResponse> stdoutAfter = (request, response) -> {
 
     logger(TaskRouter.class).info(
-      "response={} status={} {}",
+      "response={} status={}",
       request.toString(),
-      response.statusCode().value(),
-      response.statusCode().getReasonPhrase()
+      response.statusCode().value()
     );
 
     return response;

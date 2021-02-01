@@ -13,6 +13,7 @@ public class MapperUtils {
     return Task.builder()
         .id(entity.getUuid())
         .title(entity.getTitle())
+        .description(entity.getDescription())
         .createdAt(entity.getCreatedAt())
         .completedAt(entity.getCompletedAt())
         .deletedAt(entity.getDeletedAt())

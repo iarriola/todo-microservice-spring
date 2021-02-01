@@ -9,8 +9,8 @@ Host: localhost:8080
 Content-Type: application/json
 
 {
-    "title": "API request title",
-    "description": "API request description"
+    "title": "this is a title",
+    "description": "This is my custom description"
 }
 
 ###
