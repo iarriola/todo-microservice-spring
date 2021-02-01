@@ -1,7 +1,5 @@
 package com.incode.todo.models;
 
-import java.util.function.BiFunction;
-
 import org.springframework.http.HttpStatus;
 
 public class AppException extends RuntimeException {
