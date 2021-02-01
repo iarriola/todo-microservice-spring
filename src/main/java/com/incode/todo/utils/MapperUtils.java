@@ -1,16 +1,18 @@
 package com.incode.todo.utils;
 
-import com.incode.todo.models.Task;
-import com.incode.todo.models.TaskPatch;
-import com.incode.todo.models.TaskPost;
+import com.incode.todo.models.TaskRequest;
+import com.incode.todo.models.TaskResponse;
 import com.incode.todo.repositories.entities.TaskEntity;
 
+import org.springframework.util.MultiValueMap;
+
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.UUID;
 
 public class MapperUtils {
-  public static Task toModel(TaskEntity entity) {
-    return Task.builder()
+  public static TaskResponse toModel(TaskEntity entity) {
+    return TaskResponse.builder()
         .id(entity.getUuid())
         .title(entity.getTitle())
         .description(entity.getDescription())
@@ -20,9 +22,9 @@ public class MapperUtils {
         .build();
   }
 
-  public static List<Task> toListModel(TaskEntity entity) {
+  public static List<TaskResponse> toListModel(TaskEntity entity) {
     return List.of(
-      Task.builder()
+      TaskResponse.builder()
         .id(entity.getUuid())
         .title(entity.getTitle())
         .description(entity.getDescription())
@@ -33,7 +35,7 @@ public class MapperUtils {
     );
   }
 
-  public static TaskEntity toEntity(TaskPost model) {
+  public static TaskEntity toEntity(TaskRequest model) {
     return TaskEntity
       .builder()
       .title(model.getTitle())
@@ -45,13 +47,32 @@ public class MapperUtils {
     return TaskEntity.builder().uuid(id).build();
   }
 
-  public static TaskEntity patchEntity(TaskEntity entity, TaskPatch model) {
-    ObjectsUtils.applyObjectChange(model.getTitle(), entity.getTitle())
-        .ifPresent(entity::setTitle);
+  public static TaskEntity patchEntity(TaskEntity entity, TaskRequest model, MultiValueMap<String, String> params) {
 
-    ObjectsUtils.applyObjectChange(model.getDescription(), entity.getDescription())
-        .ifPresent(entity::setTitle);
+    ObjectsUtils.applyObjectChange(
+      model.getTitle(),
+      entity.getTitle()
+    ).ifPresent(entity::setTitle);
+
+    ObjectsUtils.applyObjectChange(
+      model.getDescription(),
+      entity.getDescription()
+    ).ifPresent(entity::setDescription);
+
+    if(Boolean.parseBoolean(params.get("completed").get(0))) {
+      entity.setCompletedAt(ZonedDateTime.now());
+    }
 
     return entity;
   }
+
+  public static Boolean isSoftDelete(MultiValueMap<String, String> params) {
+    return Boolean.parseBoolean(params.get("soft").get(0));
+  }
+
+  public static TaskEntity patchSoftDeleteEntity(TaskEntity entity) {
+    entity.setDeletedAt(ZonedDateTime.now());
+    return entity;
+  }
+
 }

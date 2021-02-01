@@ -49,6 +49,11 @@ management:
     diskspace:
       enabled: false
 
+  jackson:
+    default-property-inclusion: non_null
+
+  #jackson:serialization-inclusion=non_null
+
 logging:
   level:
     org.springframework.web.reactive.function.client.ExchangeFunctions: TRACE

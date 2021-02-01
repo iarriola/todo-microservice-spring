@@ -51,7 +51,7 @@ public class AppException extends RuntimeException {
             }
             i++;
         }
-        final String out = builder.toString().trim();
+        final String out = builder.toString();
         return out;
     }
 

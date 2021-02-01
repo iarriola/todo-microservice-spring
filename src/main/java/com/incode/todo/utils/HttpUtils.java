@@ -4,6 +4,7 @@ import com.incode.todo.models.AppErrorType;
 import com.incode.todo.models.AppException;
 import com.incode.todo.models.AppResponse;
 
+import org.springframework.core.codec.CodecException;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -50,6 +51,11 @@ public class HttpUtils {
 
     AppException exception = null;
 
+    if(throwable instanceof CodecException) {
+      CodecException e = (CodecException)throwable;
+      exception = new AppException(HttpStatus.BAD_REQUEST, e.getMessage());
+    }
+
     if(throwable instanceof AppException) {
       exception = (AppException) throwable;
     }
@@ -66,7 +72,7 @@ public class HttpUtils {
 
     if(throwable instanceof ServerWebInputException) {
       ServerWebInputException e = (ServerWebInputException) throwable;
-      exception = new AppException(AppErrorType.BAD_REQUEST, e.getMessage());
+      exception = new AppException(HttpStatus.BAD_REQUEST, e.getCause().getMessage());
     }
 
     if(throwable instanceof DataAccessException) {
@@ -78,7 +84,7 @@ public class HttpUtils {
     }
 
     if(exception.status().value() == HttpStatus.BAD_REQUEST.value()) {
-      LoggerUtils.logger(HttpUtils.class).debug("message={}", exception.getMessage());
+      LoggerUtils.logger(HttpUtils.class).debug("message={}", exception.getMessage(), exception);
     } else {
       LoggerUtils.logger(HttpUtils.class).error(exception.getMessage(), exception);
     }

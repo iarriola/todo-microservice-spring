@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TaskPost {
+public class TaskRequest {
   private String title;
   private String description;
 }

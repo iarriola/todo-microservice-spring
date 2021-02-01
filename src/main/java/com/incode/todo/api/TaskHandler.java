@@ -1,7 +1,6 @@
 package com.incode.todo.api;
 
-import com.incode.todo.models.TaskPatch;
-import com.incode.todo.models.TaskPost;
+import com.incode.todo.models.TaskRequest;
 import com.incode.todo.services.TaskService;
 import com.incode.todo.utils.HttpUtils;
 import com.incode.todo.utils.ValidatorUtils;
@@ -39,29 +38,29 @@ public class TaskHandler {
 
   public Mono<ServerResponse> post(ServerRequest request) {
     return request
-      .bodyToMono(TaskPost.class)
-      //.flatMap(task -> service.createTask(task))
+      .bodyToMono(TaskRequest.class)
       .flatMap(task -> HttpUtils.validate(task, validator))
       .flatMap(task -> service.createTask(task))
       .flatMap(HttpUtils::okResponse)
-      //.switchIfEmpty(HttpUtils.badRequestResponse("Please provide a valid task"))
-      .onErrorResume(HttpUtils::handleError);
-  }
-
-  public Mono<ServerResponse> delete(ServerRequest request) {
-    return service
-      .removeTask(request.pathVariable("id"))
-      .flatMap(HttpUtils::noContentResponse)
-      .switchIfEmpty(HttpUtils.notFoundResponse("Unable to find task"))
       .onErrorResume(HttpUtils::handleError);
   }
 
   public Mono<ServerResponse> patch(ServerRequest request) {
     return request
-      .bodyToMono(TaskPatch.class)
-      .map(patch -> service.updateTask(request.pathVariable("id"), patch))
+      .bodyToMono(TaskRequest.class)
+      .flatMap(task -> HttpUtils.validate(task, validator))
+      .flatMap(task -> service.updateTask(request.pathVariable("id"), task, request.queryParams()))
       .flatMap(HttpUtils::okResponse)
       .switchIfEmpty(HttpUtils.notFoundResponse("Unable to find task"))
       .onErrorResume(HttpUtils::handleError);
   }
+
+  public Mono<ServerResponse> delete(ServerRequest request) {
+    return service
+      .removeTask(request.pathVariable("id"), request.queryParams())
+      .flatMap(HttpUtils::noContentResponse)
+      .switchIfEmpty(HttpUtils.notFoundResponse("Unable to find task"))
+      .onErrorResume(HttpUtils::handleError);
+  }
+
 }
