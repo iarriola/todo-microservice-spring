@@ -1,5 +1,7 @@
 package com.incode.todo.utils;
 
+import java.util.Collection;
+
 import com.incode.todo.models.AppErrorType;
 import com.incode.todo.models.AppException;
 import com.incode.todo.models.AppResponse;
@@ -26,7 +28,18 @@ public class HttpUtils {
   }
 
   public static Mono<ServerResponse> noContentResponse(Object obj) {
-    return ServerResponse.noContent().build();
+
+    if(obj instanceof Collection && obj != null) {
+      if(((Collection<?>)obj).isEmpty()) {
+        return ServerResponse.noContent().build();
+      } else {
+        return ServerResponse.ok()
+        .contentType(MediaType.APPLICATION_JSON)
+        .body(BodyInserters.fromValue(obj));
+      }
+    } else {
+      return ServerResponse.noContent().build();
+    }
   }
 
   public static Mono<ServerResponse> notFoundResponse(String message) {
@@ -51,13 +64,13 @@ public class HttpUtils {
 
     AppException exception = null;
 
+    if(throwable instanceof AppException) {
+      exception = (AppException) throwable;
+    }
+
     if(throwable instanceof CodecException) {
       CodecException e = (CodecException)throwable;
       exception = new AppException(HttpStatus.BAD_REQUEST, e.getMessage());
-    }
-
-    if(throwable instanceof AppException) {
-      exception = (AppException) throwable;
     }
 
     if (throwable instanceof ResponseStatusException) {
@@ -83,8 +96,8 @@ public class HttpUtils {
       exception = new AppException(AppErrorType.INTERNAL_ERROR, throwable.getMessage());
     }
 
-    if(exception.status().value() == HttpStatus.BAD_REQUEST.value()) {
-      LoggerUtils.logger(HttpUtils.class).debug("message={}", exception.getMessage(), exception);
+    if(is4xx(exception.status())) {
+      LoggerUtils.logger(HttpUtils.class).debug("message={}", exception.getMessage());
     } else {
       LoggerUtils.logger(HttpUtils.class).error(exception.getMessage(), exception);
     }
@@ -114,6 +127,18 @@ public class HttpUtils {
 
   public static <T> Mono<T> validate(T model, ValidatorUtils validator) {
     return validator.validate(model);
+  }
+
+  public static boolean is4xx(HttpStatus status) {
+    return ObjectsUtils.between(400, 499, status.value());
+  }
+
+  public static <T> Mono<? extends T> emptyObjectError() {
+    return emptyObjectError("Unable to find task");
+  }
+
+  public static <T> Mono<? extends T> emptyObjectError(String message) {
+      return Mono.error(new AppException(AppErrorType.NOT_FOUND, message));
   }
 
 }

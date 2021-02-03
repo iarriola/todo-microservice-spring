@@ -42,8 +42,8 @@ public class MapperUtils {
       .build();
   }
 
-  public static TaskEntity toEntity(UUID id) {
-    return TaskEntity.builder().uuid(id).build();
+  public static TaskEntity toEntity(String id) {
+    return TaskEntity.builder().uuid(UUID.fromString(id)).build();
   }
 
   public static TaskEntity patchEntity(TaskEntity entity, TaskRequest model, Optional<String> completed) {
@@ -51,12 +51,12 @@ public class MapperUtils {
     ObjectsUtils.applyObjectChange(
       model.getTitle(),
       entity.getTitle()
-    ).ifPresent(entity::setTitle);
+    ).ifPresent(title -> entity.setTitle(title.trim()));
 
     ObjectsUtils.applyObjectChange(
       model.getDescription(),
       entity.getDescription()
-    ).ifPresent(entity::setDescription);
+    ).ifPresent(description -> entity.setDescription(description.trim()));
 
     completed
     .map(Boolean::parseBoolean)

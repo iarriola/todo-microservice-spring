@@ -13,13 +13,13 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 public class LoggerUtils {
   public static Function<ServerRequest, ServerRequest> stdoutBefore =
     request -> {
-      logger(TaskRouter.class).info("request={}", request.toString());
+      logger(TaskRouter.class).debug("request={}", request.toString());
       return request;
     };
 
   public static BiFunction<ServerRequest, ServerResponse, ServerResponse> stdoutAfter = (request, response) -> {
 
-    logger(TaskRouter.class).info(
+    logger(TaskRouter.class).debug(
       "response={} status={}",
       request.toString(),
       response.statusCode().value()

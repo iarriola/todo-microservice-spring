@@ -32,7 +32,6 @@ public class TaskHandler {
     return service
       .getTask(request.pathVariable("id"))
       .flatMap(HttpUtils::okResponse)
-      .switchIfEmpty(HttpUtils.notFoundResponse("Unable to find task"))
       .onErrorResume(HttpUtils::handleError);
   }
 
@@ -51,7 +50,6 @@ public class TaskHandler {
       .flatMap(task -> HttpUtils.validate(task, validator))
       .flatMap(task -> service.updateTask(request.pathVariable("id"), task, request.queryParam("completed")))
       .flatMap(HttpUtils::okResponse)
-      .switchIfEmpty(HttpUtils.notFoundResponse("Unable to find task"))
       .onErrorResume(HttpUtils::handleError);
   }
 
@@ -59,7 +57,6 @@ public class TaskHandler {
     return service
       .removeTask(request.pathVariable("id"), request.queryParam("soft"))
       .flatMap(HttpUtils::noContentResponse)
-      .switchIfEmpty(HttpUtils.notFoundResponse("Unable to find task"))
       .onErrorResume(HttpUtils::handleError);
   }
 

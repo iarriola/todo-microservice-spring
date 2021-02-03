@@ -20,8 +20,15 @@ public class TaskRequestValidator implements Validator {
 
     @Override
     public void validate(Object target, Errors errors) {
-        this.rejectIfEmptyOrWhitespace(errors, DEFAULT_MESSAGE, "title");
-        this.rejectIfEmptyOrWhitespace(errors, DEFAULT_MESSAGE, "description");
+
+        if(((TaskRequest)target).getTitle() != null) {
+            this.rejectIfEmptyOrWhitespace(errors, DEFAULT_MESSAGE, "title");
+        }
+
+        if(((TaskRequest)target).getDescription() != null) {
+            this.rejectIfEmptyOrWhitespace(errors, DEFAULT_MESSAGE, "description");
+        }
+
     }
 
     private void rejectIfEmptyOrWhitespace(Errors errors, final String message, final String field) {

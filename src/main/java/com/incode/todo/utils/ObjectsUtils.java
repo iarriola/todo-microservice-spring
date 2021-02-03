@@ -21,4 +21,8 @@ public class ObjectsUtils {
     }
   }
 
+  public static boolean between(int min, int max, int value) {
+    return value >= min && value <= max;
+  }
+
 }
