@@ -21,7 +21,7 @@ public class AppException extends RuntimeException {
     }
 
     public AppException(final AppErrorType error, String... pairs) {
-        super(pairs.length == 0 ? error.getMessage() : error.getMessage() + flatten(pairs));
+        super(pairs.length == 0 ? error.getStatus().getReasonPhrase() : flatten(pairs));
         this.code = error.name();
         this.status = error.getStatus();
     }
@@ -51,7 +51,7 @@ public class AppException extends RuntimeException {
             }
             i++;
         }
-        final String out = builder.toString();
+        final String out = builder.toString().trim();
         return out;
     }
 

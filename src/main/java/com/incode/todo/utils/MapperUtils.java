@@ -4,10 +4,9 @@ import com.incode.todo.models.TaskRequest;
 import com.incode.todo.models.TaskResponse;
 import com.incode.todo.repositories.entities.TaskEntity;
 
-import org.springframework.util.MultiValueMap;
-
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public class MapperUtils {
@@ -47,7 +46,7 @@ public class MapperUtils {
     return TaskEntity.builder().uuid(id).build();
   }
 
-  public static TaskEntity patchEntity(TaskEntity entity, TaskRequest model, MultiValueMap<String, String> params) {
+  public static TaskEntity patchEntity(TaskEntity entity, TaskRequest model, Optional<String> completed) {
 
     ObjectsUtils.applyObjectChange(
       model.getTitle(),
@@ -59,15 +58,24 @@ public class MapperUtils {
       entity.getDescription()
     ).ifPresent(entity::setDescription);
 
-    if(Boolean.parseBoolean(params.get("completed").get(0))) {
-      entity.setCompletedAt(ZonedDateTime.now());
-    }
+    completed
+    .map(Boolean::parseBoolean)
+    .map(param -> patchCompletedEntity(entity, param));
 
     return entity;
   }
 
-  public static Boolean isSoftDelete(MultiValueMap<String, String> params) {
-    return Boolean.parseBoolean(params.get("soft").get(0));
+  private static TaskEntity patchCompletedEntity(TaskEntity entity, Boolean completed) {
+    if(completed) {
+      entity.setCompletedAt(ZonedDateTime.now());
+    } else {
+      entity.setCompletedAt(null);
+    }
+    return entity;
+  }
+
+  public static Boolean isSoftDelete(Optional<String> soft) {
+    return soft.map(Boolean::parseBoolean).get();
   }
 
   public static TaskEntity patchSoftDeleteEntity(TaskEntity entity) {

@@ -49,7 +49,7 @@ public class TaskHandler {
     return request
       .bodyToMono(TaskRequest.class)
       .flatMap(task -> HttpUtils.validate(task, validator))
-      .flatMap(task -> service.updateTask(request.pathVariable("id"), task, request.queryParams()))
+      .flatMap(task -> service.updateTask(request.pathVariable("id"), task, request.queryParam("completed")))
       .flatMap(HttpUtils::okResponse)
       .switchIfEmpty(HttpUtils.notFoundResponse("Unable to find task"))
       .onErrorResume(HttpUtils::handleError);
@@ -57,7 +57,7 @@ public class TaskHandler {
 
   public Mono<ServerResponse> delete(ServerRequest request) {
     return service
-      .removeTask(request.pathVariable("id"), request.queryParams())
+      .removeTask(request.pathVariable("id"), request.queryParam("soft"))
       .flatMap(HttpUtils::noContentResponse)
       .switchIfEmpty(HttpUtils.notFoundResponse("Unable to find task"))
       .onErrorResume(HttpUtils::handleError);

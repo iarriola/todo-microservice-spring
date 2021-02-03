@@ -6,11 +6,11 @@ import com.incode.todo.repositories.TaskRepository;
 import com.incode.todo.utils.MapperUtils;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
-import org.springframework.util.MultiValueMap;
 
 import reactor.core.publisher.Mono;
 
@@ -34,20 +34,17 @@ public class TaskService {
       .map(MapperUtils::toListModel);
   }
 
-  public Mono<List<TaskResponse>> updateTask(String id, TaskRequest model, MultiValueMap<String, String> params) {
-
-    
+  public Mono<List<TaskResponse>> updateTask(String id, TaskRequest model, Optional<String> completed) {
     return repository
       .findById(UUID.fromString(id))
-      .map(entity -> MapperUtils.patchEntity(entity, model, params))
+      .map(entity -> MapperUtils.patchEntity(entity, model, completed))
       .switchIfEmpty(Mono.empty())
       .flatMap(entity -> repository.save(entity).map(MapperUtils::toListModel));
-
   }
 
-  public Mono<Void> removeTask(String id,  MultiValueMap<String, String> params) {
+  public Mono<Void> removeTask(String id,  Optional<String> soft) {
 
-    if (MapperUtils.isSoftDelete(params)) {
+    if (MapperUtils.isSoftDelete(soft)) {
       repository
         .findById(UUID.fromString(id))
         .map(entity -> MapperUtils.patchSoftDeleteEntity(entity))
