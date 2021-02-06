@@ -11,18 +11,28 @@ import org.springframework.web.reactive.function.server.RouterFunctions;
 import org.springframework.web.reactive.function.server.ServerResponse;
 
 @Configuration
-public class TaskRouter implements ApiRoutes {
+public class TaskRouter {
+
+  private final String tasks = "/api/v1/tasks";
+
+  private final String task = "/api/v1/tasks/{id}";
+
+  private final String admin = "/admin";
+
+  public String[] allowedRoutes() {
+    return new String[] {"/", admin + "/**", task};
+  }
 
   @Bean
   public RouterFunction<ServerResponse> route(TaskHandler handler) {
     return RouterFunctions
       .route()
       .before(LoggerUtils.stdoutBefore)
-      .GET(TASKS, handler::getAll)
-      .GET(TASK, handler::get)
-      .POST(TASKS, handler::post)
-      .DELETE(TASK, RequestPredicates.accept(MediaType.TEXT_PLAIN), handler::delete)
-      .PATCH(TASK, handler::patch)
+      .POST(tasks, handler::post)
+      .GET(tasks, handler::getAll)
+      .GET(task, handler::get)
+      .PATCH(task, handler::patch)
+      .DELETE(task, RequestPredicates.accept(MediaType.TEXT_PLAIN), handler::delete)
       .after(LoggerUtils.stdoutAfter)
       .build();
   }

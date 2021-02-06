@@ -1,6 +1,10 @@
 GET /api/v1/tasks HTTP/1.1
 Host: localhost:8080
 
+### 7cb19f48-aa32-4058-b0dd-3a0c69b2d781
+GET /api/v1/tasks/7cb19f48-aa32-4058-b0dd-3a0c69b2d781 HTTP/1.1
+Host: localhost:8080
+
 ###
 POST /api/v1/tasks HTTP/1.1
 Host: localhost:8080
@@ -12,11 +16,8 @@ Content-Type: application/json
 }
 
 ###
-GET /api/v1/tasks/846cba17-06da-4c63-9d61-23f729f75f13 HTTP/1.1
-Host: localhost:8080
-
-### 
-PATCH /api/v1/tasks/846cba17-06da-4c63-9d61-23f729f75f13?completed=true HTTP/1.1
+### ?completed=true
+PATCH /api/v1/tasks/7cb19f48-aa32-4058-b0dd-3a0c69b2d781 HTTP/1.1
 Host: localhost:8080
 Content-Type: application/json
 
@@ -26,7 +27,8 @@ Content-Type: application/json
 }
 
 ###
-DELETE /api/v1/tasks/846cba17-06da-4c63-9d61-23f729f75f13?soft=false HTTP/1.1
+### ?soft=false
+DELETE /api/v1/tasks/7cb19f48-aa32-4058-b0dd-3a0c69b2d781 HTTP/1.1
 Host: localhost:8080
 
 ###

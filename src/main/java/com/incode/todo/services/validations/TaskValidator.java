@@ -1,8 +1,5 @@
-package com.incode.todo.utils;
+package com.incode.todo.services.validations;
 
-import java.util.function.Function;
-
-import com.incode.todo.api.validations.TaskRequestValidator;
 import com.incode.todo.models.AppErrorType;
 import com.incode.todo.models.AppException;
 import com.incode.todo.models.TaskRequest;
@@ -18,7 +15,7 @@ import reactor.core.publisher.Mono;
 
 @Component
 @RequiredArgsConstructor
-public class ValidatorUtils {
+public class TaskValidator {
 
     private final TaskRequestValidator postValidator;
 
@@ -39,7 +36,8 @@ public class ValidatorUtils {
 
       if(validator == null) {
           throw new AppException(
-              AppErrorType.BAD_REQUEST
+              AppErrorType.BAD_REQUEST,
+              "Unable to validate request"
           );
       }
 
@@ -55,14 +53,10 @@ public class ValidatorUtils {
       } else {
         throw new AppException(
             HttpStatus.BAD_REQUEST,
-            defaultMessage.apply(errors)
+            errors.getAllErrors().get(FIRST_INDEX).getDefaultMessage()
         );
       }
 
   }
-
-  private Function<Errors, String> defaultMessage = errors -> {
-    return errors.getAllErrors().get(FIRST_INDEX).getDefaultMessage();
-  };
 
 }

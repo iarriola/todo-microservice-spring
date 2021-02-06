@@ -2,8 +2,8 @@ package com.incode.todo.api;
 
 import com.incode.todo.models.TaskRequest;
 import com.incode.todo.services.TaskService;
+import com.incode.todo.services.validations.TaskValidator;
 import com.incode.todo.utils.HttpUtils;
-import com.incode.todo.utils.ValidatorUtils;
 
 import lombok.RequiredArgsConstructor;
 
@@ -19,7 +19,7 @@ public class TaskHandler {
 
   private final TaskService service;
 
-  private final ValidatorUtils validator;
+  private final TaskValidator validator;
 
   public Mono<ServerResponse> getAll(ServerRequest request) {
     return service
@@ -38,7 +38,7 @@ public class TaskHandler {
   public Mono<ServerResponse> post(ServerRequest request) {
     return request
       .bodyToMono(TaskRequest.class)
-      .flatMap(task -> HttpUtils.validate(task, validator))
+      .flatMap(task -> validator.validate(task))
       .flatMap(task -> service.createTask(task))
       .flatMap(HttpUtils::okResponse)
       .onErrorResume(HttpUtils::handleError);
@@ -47,7 +47,7 @@ public class TaskHandler {
   public Mono<ServerResponse> patch(ServerRequest request) {
     return request
       .bodyToMono(TaskRequest.class)
-      .flatMap(task -> HttpUtils.validate(task, validator))
+      .flatMap(task -> validator.validate(task))
       .flatMap(task -> service.updateTask(request.pathVariable("id"), task, request.queryParam("completed")))
       .flatMap(HttpUtils::okResponse)
       .onErrorResume(HttpUtils::handleError);

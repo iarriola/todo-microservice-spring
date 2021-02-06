@@ -6,6 +6,7 @@ import java.util.stream.Stream;
 import org.springframework.util.ObjectUtils;
 
 public class ObjectsUtils {
+
   public static <T> Optional<T> applyObjectChange(T value, T defaultValue) {
     return Stream.of(value, defaultValue)
         .filter(Objects::nonNull)

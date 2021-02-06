@@ -125,20 +125,12 @@ public class HttpUtils {
       .build();
   }
 
-  public static <T> Mono<T> validate(T model, ValidatorUtils validator) {
-    return validator.validate(model);
-  }
-
-  public static boolean is4xx(HttpStatus status) {
+  private static boolean is4xx(HttpStatus status) {
     return ObjectsUtils.between(400, 499, status.value());
   }
 
   public static <T> Mono<? extends T> emptyObjectError() {
-    return emptyObjectError("Unable to find task");
-  }
-
-  public static <T> Mono<? extends T> emptyObjectError(String message) {
-      return Mono.error(new AppException(AppErrorType.NOT_FOUND, message));
+      return Mono.error(new AppException(AppErrorType.NOT_FOUND));
   }
 
 }

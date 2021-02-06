@@ -1,4 +1,4 @@
-package com.incode.todo.api.validations;
+package com.incode.todo.services.validations;
 
 import com.incode.todo.models.TaskRequest;
 

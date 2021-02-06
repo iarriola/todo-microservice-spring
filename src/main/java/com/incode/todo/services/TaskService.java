@@ -1,11 +1,12 @@
 package com.incode.todo.services;
 
+import com.incode.todo.models.AppErrorType;
+import com.incode.todo.models.AppException;
 import com.incode.todo.models.TaskRequest;
 import com.incode.todo.models.TaskResponse;
 import com.incode.todo.repositories.TaskRepository;
 import com.incode.todo.utils.HttpUtils;
-import com.incode.todo.utils.LoggerUtils;
-import com.incode.todo.utils.MapperUtils;
+import com.incode.todo.utils.UuidUtils;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,28 +24,34 @@ public class TaskService {
   private final TaskRepository repository;
 
   public Mono<List<TaskResponse>> getAllTasks() {
-    return repository.findAll().map(MapperUtils::toModel).collectList();
+    return repository.findAll().map(TaskMapper::toModel).collectList();
   }
 
   public Mono<List<TaskResponse>> getTask(String id) {
-    return repository
-      .findById(UUID.fromString(id))
-      .switchIfEmpty(HttpUtils.emptyObjectError())
-      .map(MapperUtils::toListModel);
+
+    return UuidUtils
+      .getUuid(id)
+      .map(uuid -> {
+        return repository
+          .findById(uuid)
+          .switchIfEmpty(HttpUtils.emptyObjectError())
+          .map(TaskMapper::toListModel);
+      })
+      .orElse(Mono.error(new AppException(AppErrorType.NOT_FOUND)));
   }
 
   public Mono<List<TaskResponse>> createTask(TaskRequest model) {
     return repository
-      .save(MapperUtils.toEntity(model))
-      .map(MapperUtils::toListModel);
+      .save(TaskMapper.toEntity(model))
+      .map(TaskMapper::toListModel);
   }
 
   public Mono<List<TaskResponse>> updateTask(String id, TaskRequest model, Optional<String> completed) {
     return repository
       .findById(UUID.fromString(id))
-      .map(entity -> MapperUtils.patchEntity(entity, model, completed))
+      .map(entity -> TaskMapper.patchEntity(entity, model, completed))
       .switchIfEmpty(HttpUtils.emptyObjectError())
-      .flatMap(entity -> repository.save(entity).map(MapperUtils::toListModel));
+      .flatMap(entity -> repository.save(entity).map(TaskMapper::toListModel));
   }
 
   public Mono<List<TaskResponse>> removeTask(String id, Optional<String> soft) {
@@ -52,14 +59,12 @@ public class TaskService {
       .findById(UUID.fromString(id))
       .switchIfEmpty(HttpUtils.emptyObjectError())
       .flatMap(entity -> {
-        if(soft.isPresent() && !MapperUtils.isSoftDelete(soft)) {
-          LoggerUtils.logger(this.getClass()).debug("Doing a hard delete");
-          repository.deleteById(entity.getUuid());
-          return Mono.just(List.of());
-        } else {
+        if(soft.isPresent() && TaskMapper.isSoftDelete(soft)) {
           return repository
-            .save(MapperUtils.patchSoftDeleteEntity(entity))
-            .map(MapperUtils::toListModel);
+            .save(TaskMapper.patchSoftDeleteEntity(entity))
+            .map(TaskMapper::toListModel);
+        } else {
+          return repository.deleteById(entity.getUuid()).then(Mono.just(List.of()));
         }
       });
   }

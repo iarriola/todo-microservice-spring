@@ -1,15 +1,16 @@
-package com.incode.todo.utils;
+package com.incode.todo.services;
 
 import com.incode.todo.models.TaskRequest;
 import com.incode.todo.models.TaskResponse;
 import com.incode.todo.repositories.entities.TaskEntity;
+import com.incode.todo.utils.ObjectsUtils;
 
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public class MapperUtils {
+public class TaskMapper {
   public static TaskResponse toModel(TaskEntity entity) {
     return TaskResponse.builder()
         .id(entity.getUuid())
