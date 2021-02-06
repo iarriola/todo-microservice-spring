@@ -99,7 +99,7 @@ public class HttpUtils {
     if(is4xx(exception.status())) {
       LoggerUtils.logger(HttpUtils.class).debug("message={}", exception.getMessage());
     } else {
-      LoggerUtils.logger(HttpUtils.class).error(exception.getMessage(), exception);
+      LoggerUtils.logger(HttpUtils.class).error("message={}", exception.getMessage(), exception);
     }
 
     return Mono.just(exception);
