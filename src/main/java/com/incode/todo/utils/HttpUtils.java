@@ -115,7 +115,7 @@ public class HttpUtils {
       .body(BodyInserters.fromValue(
         responseBody(status, message)
     ));
-}
+  }
 
   private static AppResponse responseBody(HttpStatus status, String message) {
     return AppResponse
