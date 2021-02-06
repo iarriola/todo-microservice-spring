@@ -106,15 +106,15 @@ public class HttpUtils {
   }
 
   private static Mono<ServerResponse> httpResponse(AppException exception) {
-      return httpResponse(exception.status(), exception.getMessage());
+    return httpResponse(exception.status(), exception.getMessage());
   }
 
   private static Mono<ServerResponse> httpResponse(HttpStatus status, String message) {
     return ServerResponse.status(status)
-            .contentType(MediaType.APPLICATION_JSON)
-            .body(BodyInserters.fromValue(
-              responseBody(status, message)
-            ));
+      .contentType(MediaType.APPLICATION_JSON)
+      .body(BodyInserters.fromValue(
+        responseBody(status, message)
+    ));
 }
 
   private static AppResponse responseBody(HttpStatus status, String message) {
@@ -128,6 +128,5 @@ public class HttpUtils {
   private static boolean is4xx(HttpStatus status) {
     return ObjectsUtils.between(400, 499, status.value());
   }
-
 
 }
