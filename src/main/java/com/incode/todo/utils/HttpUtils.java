@@ -129,8 +129,5 @@ public class HttpUtils {
     return ObjectsUtils.between(400, 499, status.value());
   }
 
-  public static <T> Mono<? extends T> emptyObjectError() {
-      return Mono.error(new AppException(AppErrorType.NOT_FOUND));
-  }
 
 }

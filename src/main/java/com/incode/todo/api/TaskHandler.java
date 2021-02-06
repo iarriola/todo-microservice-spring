@@ -1,8 +1,8 @@
 package com.incode.todo.api;
 
 import com.incode.todo.models.TaskRequest;
+import com.incode.todo.services.TaskFilter;
 import com.incode.todo.services.TaskService;
-import com.incode.todo.services.validations.TaskValidator;
 import com.incode.todo.utils.HttpUtils;
 
 import lombok.RequiredArgsConstructor;
@@ -19,18 +19,38 @@ public class TaskHandler {
 
   private final TaskService service;
 
-  private final TaskValidator validator;
+  private final TaskFilter filterService;
+
+  /**
+   * Path variable name for object identifier.
+   */
+  private final String ID = "id";
+
+  /**
+   * Query parameter name for toggle completed action.
+   */
+  private final String COMPLETED = "completed";
+
+  /**
+   * Query parameter name for soft deletion pivot.
+   */
+  private final String SOFT = "soft";
+
+  /**
+   * Query parameter name for including soft-deleted objects.
+   */
+  private final String INCLUDE = "include";
 
   public Mono<ServerResponse> getAll(ServerRequest request) {
-    return service
-      .getAllTasks()
+    return filterService
+      .readAll(request.queryParam(INCLUDE))
       .flatMap(HttpUtils::okResponse)
       .onErrorResume(HttpUtils::handleError);
   }
 
   public Mono<ServerResponse> get(ServerRequest request) {
-    return service
-      .getTask(request.pathVariable("id"))
+    return filterService
+      .read(request.pathVariable(ID), request.queryParam(INCLUDE))
       .flatMap(HttpUtils::okResponse)
       .onErrorResume(HttpUtils::handleError);
   }
@@ -38,8 +58,7 @@ public class TaskHandler {
   public Mono<ServerResponse> post(ServerRequest request) {
     return request
       .bodyToMono(TaskRequest.class)
-      .flatMap(task -> validator.validate(task))
-      .flatMap(task -> service.createTask(task))
+      .flatMap(task -> service.create(task))
       .flatMap(HttpUtils::okResponse)
       .onErrorResume(HttpUtils::handleError);
   }
@@ -47,15 +66,14 @@ public class TaskHandler {
   public Mono<ServerResponse> patch(ServerRequest request) {
     return request
       .bodyToMono(TaskRequest.class)
-      .flatMap(task -> validator.validate(task))
-      .flatMap(task -> service.updateTask(request.pathVariable("id"), task, request.queryParam("completed")))
+      .flatMap(task -> service.update(task, request.pathVariable(ID), request.queryParam(COMPLETED)))
       .flatMap(HttpUtils::okResponse)
       .onErrorResume(HttpUtils::handleError);
   }
 
   public Mono<ServerResponse> delete(ServerRequest request) {
     return service
-      .removeTask(request.pathVariable("id"), request.queryParam("soft"))
+      .remove(request.pathVariable(ID), request.queryParam(SOFT))
       .flatMap(HttpUtils::noContentResponse)
       .onErrorResume(HttpUtils::handleError);
   }

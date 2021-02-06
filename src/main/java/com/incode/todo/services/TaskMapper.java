@@ -5,6 +5,8 @@ import com.incode.todo.models.TaskResponse;
 import com.incode.todo.repositories.entities.TaskEntity;
 import com.incode.todo.utils.ObjectsUtils;
 
+import reactor.core.publisher.Mono;
+
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -35,6 +37,10 @@ public class TaskMapper {
     );
   }
 
+  public static Mono<List<TaskResponse>> toListModel() {
+    return Mono.just(List.of());
+  }
+
   public static TaskEntity toEntity(TaskRequest model) {
     return TaskEntity
       .builder()
@@ -47,7 +53,7 @@ public class TaskMapper {
     return TaskEntity.builder().uuid(UUID.fromString(id)).build();
   }
 
-  public static TaskEntity patchEntity(TaskEntity entity, TaskRequest model, Optional<String> completed) {
+  public static TaskEntity applyEntityChanges(TaskEntity entity, TaskRequest model, Optional<String> completed) {
 
     ObjectsUtils.applyObjectChange(
       model.getTitle(),
@@ -82,6 +88,10 @@ public class TaskMapper {
   public static TaskEntity patchSoftDeleteEntity(TaskEntity entity) {
     entity.setDeletedAt(ZonedDateTime.now());
     return entity;
+  }
+
+  public static Boolean filterSoftDeleted(TaskEntity model) {
+    return model.getDeletedAt() == null;
   }
 
 }

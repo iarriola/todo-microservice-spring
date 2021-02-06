@@ -4,8 +4,6 @@ import com.incode.todo.utils.LoggerUtils;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.MediaType;
-import org.springframework.web.reactive.function.server.RequestPredicates;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.RouterFunctions;
 import org.springframework.web.reactive.function.server.ServerResponse;
@@ -32,7 +30,7 @@ public class TaskRouter {
       .GET(tasks, handler::getAll)
       .GET(task, handler::get)
       .PATCH(task, handler::patch)
-      .DELETE(task, RequestPredicates.accept(MediaType.TEXT_PLAIN), handler::delete)
+      .DELETE(task, handler::delete)
       .after(LoggerUtils.stdoutAfter)
       .build();
   }
