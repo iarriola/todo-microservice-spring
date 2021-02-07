@@ -44,38 +44,38 @@ public class TaskHandler {
   public Mono<ServerResponse> getAll(ServerRequest request) {
     return filterService
       .readAll(request.queryParam(INCLUDE))
-      .flatMap(HttpUtils::okResponse)
-      .onErrorResume(HttpUtils::handleError);
+      .flatMap(HttpUtils::okServerResponse)
+      .onErrorResume(HttpUtils::errorServerResponse);
   }
 
   public Mono<ServerResponse> get(ServerRequest request) {
     return filterService
       .read(request.pathVariable(ID), request.queryParam(INCLUDE))
-      .flatMap(HttpUtils::okResponse)
-      .onErrorResume(HttpUtils::handleError);
+      .flatMap(HttpUtils::okServerResponse)
+      .onErrorResume(HttpUtils::errorServerResponse);
   }
 
   public Mono<ServerResponse> post(ServerRequest request) {
     return request
       .bodyToMono(TaskRequest.class)
       .flatMap(task -> service.create(task))
-      .flatMap(HttpUtils::okResponse)
-      .onErrorResume(HttpUtils::handleError);
+      .flatMap(HttpUtils::okServerResponse)
+      .onErrorResume(HttpUtils::errorServerResponse);
   }
 
   public Mono<ServerResponse> patch(ServerRequest request) {
     return request
       .bodyToMono(TaskRequest.class)
       .flatMap(task -> service.update(task, request.pathVariable(ID), request.queryParam(COMPLETED)))
-      .flatMap(HttpUtils::okResponse)
-      .onErrorResume(HttpUtils::handleError);
+      .flatMap(HttpUtils::okServerResponse)
+      .onErrorResume(HttpUtils::errorServerResponse);
   }
 
   public Mono<ServerResponse> delete(ServerRequest request) {
     return service
       .remove(request.pathVariable(ID), request.queryParam(SOFT))
-      .flatMap(HttpUtils::noContentResponse)
-      .onErrorResume(HttpUtils::handleError);
+      .flatMap(HttpUtils::noContentServerResponse)
+      .onErrorResume(HttpUtils::errorServerResponse);
   }
 
 }

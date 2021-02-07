@@ -52,4 +52,4 @@ management:
 logging:
   level:
     org.springframework.web.reactive.function.client.ExchangeFunctions: trace
-    com.incode.todo: info
+    com.incode.todo: debug

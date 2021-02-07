@@ -3,6 +3,7 @@ package com.incode.todo.services;
 import com.incode.todo.models.TaskRequest;
 import com.incode.todo.models.TaskResponse;
 import com.incode.todo.repositories.TaskRepository;
+import com.incode.todo.utils.ErrorsUtil;
 
 import java.util.List;
 import java.util.Optional;
@@ -33,10 +34,10 @@ public class TaskService {
       .map(uuid -> {
         return repository
         .findById(uuid)
-        .switchIfEmpty(TaskErrorHandler.emptyObject())
+        .switchIfEmpty(ErrorsUtil.emptyObject())
         .map(TaskMapper::toListModel);
       })
-      .orElse(TaskErrorHandler.emptyObject());
+      .orElse(ErrorsUtil.emptyObject());
   }
 
   public Mono<List<TaskResponse>> create(TaskRequest task) {
@@ -57,7 +58,7 @@ public class TaskService {
           .findById(validator.getUuid(id).get())
           .filter(TaskMapper::filterSoftDeleted)
           .map(entity -> TaskMapper.applyEntityChanges(entity, model, completed))
-          .switchIfEmpty(TaskErrorHandler.emptyObject())
+          .switchIfEmpty(ErrorsUtil.emptyObject())
           .flatMap(entity -> repository.save(entity).map(TaskMapper::toListModel));
       });
   }
@@ -69,7 +70,7 @@ public class TaskService {
         return repository
           .findById(uuid)
           .filter(TaskMapper::filterSoftDeleted)
-          .switchIfEmpty(TaskErrorHandler.emptyObject())
+          .switchIfEmpty(ErrorsUtil.emptyObject())
           .flatMap(entity -> {
             if(soft.isPresent() && TaskMapper.isSoftDelete(soft)) {
               return repository
@@ -81,6 +82,6 @@ public class TaskService {
                 .then(TaskMapper.toListModel());
             }
           });
-      }).orElse(TaskErrorHandler.emptyObject());
+      }).orElse(ErrorsUtil.emptyObject());
   }
 }
