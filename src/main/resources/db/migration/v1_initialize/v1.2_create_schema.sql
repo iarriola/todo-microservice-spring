@@ -34,5 +34,5 @@ alter table task owner to todo_app;
 grant select, update, insert, delete on all tables in schema todo to todo_app;
 grant select, update, usage on all sequences in schema todo to todo_app;
 
-create index concurrently if not exists todo_task_id_idx on task using btree (id);
-create index concurrently if not exists todo_task_uuid_idx on task using btree (uuid);
+create index if not exists todo_task_id_idx on task using btree (id);
+create index if not exists todo_task_uuid_idx on task using btree (uuid);
