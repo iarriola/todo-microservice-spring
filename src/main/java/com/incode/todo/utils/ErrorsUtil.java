@@ -41,12 +41,12 @@ public class ErrorsUtil {
 
     if (throwable instanceof ResponseStatusException) {
       ResponseStatusException e = (ResponseStatusException) throwable;
-      exception = new AppException(e.getStatus(), e.getMessage());
+      exception = new AppException((HttpStatus)e.getStatusCode(), e.getMessage());
     }
 
     if(throwable instanceof WebClientResponseException) {
       WebClientResponseException e = (WebClientResponseException) throwable;
-      exception = new AppException(e.getStatusCode(), e.getMessage());
+      exception = new AppException((HttpStatus)e.getStatusCode(), e.getMessage());
     }
 
     if(throwable instanceof ServerWebInputException) {
