@@ -4,7 +4,7 @@ spring:
   main:
     banner-mode: off
   r2dbc:
-    url: r2dbc:postgresql://localhost:5432/postgres?currentSchema=todo
+    url: r2dbc:postgresql://postgres:5432/postgres?currentSchema=todo
     username: postgres
     password: postgres
     pool:
