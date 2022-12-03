@@ -1,0 +1,16 @@
+version: '3'
+services:
+  postgres:
+    image: incode/todo-microservice:latest
+    container_name: todo
+    ports:
+      - "8080:8080"
+      - "8084:8084"
+    environment:
+      spring.application.name: TODO Microservice Spring
+      spring.application.main.banner-mode: on
+      spring.r2dbc.url: r2dbc:postgresql://postgres:5432/postgres?currentSchema=todo
+networks:
+  default:
+    name: postgres_default
+    external: false
