@@ -24,54 +24,58 @@ public class TaskHandler {
   /**
    * Path variable name for object identifier.
    */
-  private final String ID = "id";
+  private static final String ID = "id";
 
   /**
    * Query parameter name for toggle completed action.
    */
-  private final String COMPLETED = "completed";
+  private static final String COMPLETED = "completed";
 
   /**
    * Query parameter name for soft deletion pivot.
    */
-  private final String SOFT = "soft";
+  private static final String SOFT = "soft";
 
   /**
    * Query parameter name for including soft-deleted objects.
    */
-  private final String INCLUDE = "include";
+  private static final String INCLUDE = "include";
 
-  public Mono<ServerResponse> getAll(ServerRequest request) {
+  Mono<ServerResponse> getAll(ServerRequest request) {
     return filterService
       .readAll(request.queryParam(INCLUDE))
       .flatMap(HttpUtils::okServerResponse)
       .onErrorResume(HttpUtils::errorServerResponse);
   }
 
-  public Mono<ServerResponse> get(ServerRequest request) {
+  Mono<ServerResponse> get(ServerRequest request) {
     return filterService
       .read(request.pathVariable(ID), request.queryParam(INCLUDE))
       .flatMap(HttpUtils::okServerResponse)
       .onErrorResume(HttpUtils::errorServerResponse);
   }
 
-  public Mono<ServerResponse> post(ServerRequest request) {
+  Mono<ServerResponse> post(ServerRequest request) {
     return request
       .bodyToMono(TaskRequest.class)
-      .flatMap(task -> service.create(task))
+      .flatMap(service::create)
       .flatMap(HttpUtils::okServerResponse)
       .onErrorResume(HttpUtils::errorServerResponse);
   }
 
-  public Mono<ServerResponse> patch(ServerRequest request) {
+  Mono<ServerResponse> patch(ServerRequest request) {
     return request
       .bodyToMono(TaskRequest.class)
-      .flatMap(task -> service.update(task, request.pathVariable(ID), request.queryParam(COMPLETED)))
+      .flatMap(task -> service.update(
+        task, 
+        request.pathVariable(ID),
+        request.queryParam(COMPLETED)
+      ))
       .flatMap(HttpUtils::okServerResponse)
       .onErrorResume(HttpUtils::errorServerResponse);
   }
 
-  public Mono<ServerResponse> delete(ServerRequest request) {
+  Mono<ServerResponse> delete(ServerRequest request) {
     return service
       .remove(request.pathVariable(ID), request.queryParam(SOFT))
       .flatMap(HttpUtils::noContentServerResponse)

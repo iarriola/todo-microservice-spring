@@ -42,6 +42,6 @@ public class TaskFilter {
   }
 
   private Boolean filterSoftDeleted(TaskResponse model) {
-    return model.getDeletedAt() == null;
+    return model.deletedAt() == null;
   }
 }

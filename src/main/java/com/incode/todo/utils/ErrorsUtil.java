@@ -14,6 +14,9 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public class ErrorsUtil {
+
+  private ErrorsUtil() {}
+
   public static <T> Mono<T> emptyObject() {
     return Mono.error(new AppException(AppErrorType.NOT_FOUND));
   }
@@ -30,35 +33,31 @@ public class ErrorsUtil {
 
     AppException exception = null;
 
-    if(throwable instanceof AppException) {
-        exception = (AppException) throwable;
+    if (throwable instanceof AppException e) {
+      exception = e;
     }
 
-    if(throwable instanceof CodecException) {
-      CodecException e = (CodecException)throwable;
+    if (throwable instanceof CodecException e) {
       exception = new AppException(HttpStatus.BAD_REQUEST, e.getMessage());
     }
 
-    if (throwable instanceof ResponseStatusException) {
-      ResponseStatusException e = (ResponseStatusException) throwable;
-      exception = new AppException((HttpStatus)e.getStatusCode(), e.getMessage());
+    if (throwable instanceof ResponseStatusException e) {
+      exception = new AppException((HttpStatus) e.getStatusCode(), e.getMessage());
     }
 
-    if(throwable instanceof WebClientResponseException) {
-      WebClientResponseException e = (WebClientResponseException) throwable;
-      exception = new AppException((HttpStatus)e.getStatusCode(), e.getMessage());
+    if (throwable instanceof WebClientResponseException e) {
+      exception = new AppException((HttpStatus) e.getStatusCode(), e.getMessage());
     }
 
-    if(throwable instanceof ServerWebInputException) {
-      ServerWebInputException e = (ServerWebInputException) throwable;
+    if (throwable instanceof ServerWebInputException e) {
       exception = new AppException(HttpStatus.BAD_REQUEST, e.getCause().getMessage());
     }
 
-    if(throwable instanceof DataAccessException) {
+    if (throwable instanceof DataAccessException) {
       exception = new AppException(AppErrorType.SERVICE_UNAVAILABLE, "Storage error");
     }
 
-    if(exception == null) {
+    if (exception == null) {
       exception = new AppException(AppErrorType.INTERNAL_ERROR, throwable.getMessage());
     }
 
