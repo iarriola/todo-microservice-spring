@@ -1,5 +1,5 @@
 #!/bin/bash
-mvn clean -q
+# mvn clean -q
 
 VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
 
@@ -15,7 +15,7 @@ echo "Setting new version to: ${NEW_VERSION}"
 
 echo $(mvn versions:set -DgenerateBackupPoms=false -DnewVersion=$NEW_VERSION -q)
 
-docker stop todo || true && docker rm todo || true
-
 echo 'Building image...'
 mvn -DskipTests -q spring-boot:build-image
+
+# mvn clean package -DskipTests -Pnative
