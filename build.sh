@@ -18,4 +18,6 @@ echo $(mvn versions:set -DgenerateBackupPoms=false -DnewVersion=$NEW_VERSION -q)
 echo 'Building image...'
 mvn -DskipTests -q spring-boot:build-image
 
+# mvn -DskipTests -Pnative spring-boot:build-image
+
 # mvn clean package -DskipTests -Pnative

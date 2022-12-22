@@ -19,10 +19,10 @@ spring:
       quiet-period: 1s
     livereload:
       enabled: true
-  boot:
-    admin:
-      client:
-        url: http://localhost:8020
+  # boot:
+  #   admin:
+  #     client:
+  #       url: http://localhost:8020
 
 server:
   port: 8080
