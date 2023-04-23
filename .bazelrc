@@ -1,0 +1,7 @@
+# build:java17 --java_language_version=17
+# build:java17 --java_runtime_version=remotejdk_17
+# build:java17 --tool_java_language_version=17
+# build:java17 --tool_java_runtime_version=remotejdk_17
+
+
+build --java_toolchain=@bazel_tools//tools/jdk:toolchain_java17 --host_java_toolchain=@bazel_tools//tools/jdk:toolchain_java17

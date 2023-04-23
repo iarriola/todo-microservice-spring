@@ -1,0 +1,6 @@
+ERROR:
+    /home/iarriola/.workspace/todo-microservice-spring/BUILD:1:13:
+    Building libcom_incode_todo_microservice_0_0_6_snapshot-class.jar (20 source files) failed: (Exit 1):
+        java failed: error executing command (from target //:com_incode_todo_microservice_0_0_6_snapshot) 
+        external/remotejdk11_linux/bin/java -XX:-CompactStrings '--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED' '--add-exports=jdk.compiler/com.sun.tools.javac.main=ALL-UNNAMED' ... (remaining 16 arguments skipped)
+src/main/java/com/incode/todo/models/AppResponseBody.java:6: error: class, interface, or enum expected
