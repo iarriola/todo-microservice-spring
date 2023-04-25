@@ -11,6 +11,21 @@ http_archive(
     url = "https://github.com/bazelbuild/rules_jvm_external/archive/%s.zip" % RULES_JVM_EXTERNAL_TAG,
 )
 
+LOMBOK_RULES_VERSION = "0.0.2"
+
+LOMBOK_RULES_SHA = "d28a6bb946be9780637df5b3e9acd12873ca8bbdceecd1f6d41859ac23a0c30b"
+
+http_archive(
+    name = "rules_lombok_java_library",
+    sha256 = LOMBOK_RULES_SHA,
+    strip_prefix = "rules_lombok_java_library-%s" % LOMBOK_RULES_VERSION,
+    urls = ["https://github.com/bookingcom/rules_lombok_java_library/archive/refs/tags/v%s.tar.gz" % LOMBOK_RULES_VERSION],
+)
+
+# load("@rules_lombok_java_library//:deps.bzl", "lombok_java_library_dependencies")
+
+# lombok_java_library_dependencies()
+
 load("@rules_jvm_external//:repositories.bzl", "rules_jvm_external_deps")
 
 rules_jvm_external_deps()

@@ -34,5 +34,8 @@ A simple microservice with Java and Spring Boot
 * [OpenAPI, Code Generation, Bazel, and Spring Boot | by Tom Liu | Medium](https://damuliu.medium.com/openapi-code-generation-bazel-and-spring-boot-e7a3603b3289)
 * [Bazel rule for building Spring Boot apps as a deployable jar](https://github.com/salesforce/rules_spring)
 * [Building a Spring Boot server with Bazel – ncona.com – Learning about computers](https://ncona.com/2021/11/building-a-spring-boot-server-with-bazel)
-* 
-*
+
+#### Bazel and Lombok
+
+* [Bazel project with Lombok fails to build on Bazel 4.0.0 rc10 · Issue #12837 · bazelbuild/bazel (github.com)](https://github.com/bazelbuild/bazel/issues/12837)
+* [bookingcom/rules_lombok_java_library: Bazel rules that apply delombok over your code so it can be properly passed to java_library (github.com)](https://github.com/bookingcom/rules_lombok_java_library)

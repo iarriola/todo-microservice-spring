@@ -1,6 +1,18 @@
+load("@rules_lombok_java_library//:rules.bzl", "lombok_java_library")
+
+lombok_java_library(
+    name = "lombok_java_library",
+    srcs = ["src/main/java/com/incode/todo/models/*.java"],
+    lombok_jar = "@maven//org_projectlombok_lombok",
+    deps = [
+        "@maven//:org_projectlombok_lombok_1_18_24",
+        "@maven//:org_slf4j_slf4j_api_1_7_32",
+    ],
+)
+
 java_library(
-    name = "com_incode_todo_microservice_0_0_6_snapshot",
-    srcs = glob([
+    name = "todo-microservice-lib",
+    srcs = glob([":lombok_java_library"] + [
         "src/main/java/com/incode/todo/*.java",
         "src/main/java/com/incode/todo/api/*.java",
         "src/main/java/com/incode/todo/models/*.java",
@@ -137,14 +149,14 @@ java_library(
 )
 
 java_test(
-    name = "com_incode_todo_ApplicationTests",
+    name = "todo-microservice-test",
     size = "small",
     srcs = ["src/test/java/com/incode/todo/ApplicationTests.java"],
     resources = [
     ],
     test_class = "com.incode.todo.ApplicationTests",
     deps = [
-        ":com_incode_todo_microservice_0_0_6_snapshot",
+        ":todo-microservice-lib",
     ],
 )
 
@@ -152,6 +164,6 @@ java_binary(
     name = "todo-microservice",
     main_class = "com.incode.todo.Application",
     runtime_deps = [
-        ":com_incode_todo_microservice_0_0_6_snapshot",
+        ":todo-microservice-lib",
     ],
 )
