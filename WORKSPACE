@@ -11,21 +11,6 @@ http_archive(
     url = "https://github.com/bazelbuild/rules_jvm_external/archive/%s.zip" % RULES_JVM_EXTERNAL_TAG,
 )
 
-LOMBOK_RULES_VERSION = "0.0.2"
-
-LOMBOK_RULES_SHA = "d28a6bb946be9780637df5b3e9acd12873ca8bbdceecd1f6d41859ac23a0c30b"
-
-http_archive(
-    name = "rules_lombok_java_library",
-    sha256 = LOMBOK_RULES_SHA,
-    strip_prefix = "rules_lombok_java_library-%s" % LOMBOK_RULES_VERSION,
-    urls = ["https://github.com/bookingcom/rules_lombok_java_library/archive/refs/tags/v%s.tar.gz" % LOMBOK_RULES_VERSION],
-)
-
-# load("@rules_lombok_java_library//:deps.bzl", "lombok_java_library_dependencies")
-
-# lombok_java_library_dependencies()
-
 load("@rules_jvm_external//:repositories.bzl", "rules_jvm_external_deps")
 
 rules_jvm_external_deps()
@@ -115,7 +100,7 @@ maven_install(
         "org.objenesis:objenesis:3.2",
         "org.opentest4j:opentest4j:1.2.0",
         "org.ow2.asm:asm:9.1",
-        "org.projectlombok:lombok:1.18.24",
+        "org.projectlombok:lombok:1.18.26",
         "org.reactivestreams:reactive-streams:1.0.4",
         "org.skyscreamer:jsonassert:1.5.1",
         "org.slf4j:jul-to-slf4j:2.0.4",
@@ -133,7 +118,8 @@ maven_install(
         "org.springframework.boot:spring-boot-starter-reactor-netty:3.0.0",
         "org.springframework.boot:spring-boot-starter-test:3.0.0",
         "org.springframework.boot:spring-boot-starter-validation:3.0.0",
-        "org.springframework.boot:spring-boot-starter-webflux:3.0.0",
+        # "org.springframework.boot:spring-boot-starter-webflux:3.0.0",
+        "org.springframework.boot:spring-boot-starter-web:3.0.0",
         "org.springframework.boot:spring-boot-test:3.0.0",
         "org.springframework.boot:spring-boot-test-autoconfigure:3.0.0",
         "org.springframework.data:spring-data-commons:3.0.0",

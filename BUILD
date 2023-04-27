@@ -1,27 +1,19 @@
-load("@rules_lombok_java_library//:rules.bzl", "lombok_java_library")
+java_plugin(
+    name = "lombok_plugin",
+    generates_api = True,
+    processor_class = "lombok.launch.AnnotationProcessorHider$AnnotationProcessor",
+    visibility = ["//visibility:public"],
+    deps = ["@maven//:org_projectlombok_lombok_1_18_26"],
+)
 
-lombok_java_library(
-    name = "lombok_java_library",
-    srcs = ["src/main/java/com/incode/todo/models/*.java"],
-    lombok_jar = "@maven//org_projectlombok_lombok",
-    deps = [
-        "@maven//:org_projectlombok_lombok_1_18_24",
-        "@maven//:org_slf4j_slf4j_api_1_7_32",
-    ],
+java_library(
+    name = "lombok",
+    exported_plugins = [":lombok_plugin"],
 )
 
 java_library(
     name = "todo-microservice-lib",
-    srcs = glob([":lombok_java_library"] + [
-        "src/main/java/com/incode/todo/*.java",
-        "src/main/java/com/incode/todo/api/*.java",
-        "src/main/java/com/incode/todo/models/*.java",
-        "src/main/java/com/incode/todo/repositories/*.java",
-        "src/main/java/com/incode/todo/repositories/entities/*.java",
-        "src/main/java/com/incode/todo/services/*.java",
-        "src/main/java/com/incode/todo/services/validations/*.java",
-        "src/main/java/com/incode/todo/utils/*.java",
-    ]),
+    srcs = glob(["src/main/java/com/incode/todo/**/*.java"]),
     resources = [
         "src/main/resources/application.yaml",
         "src/main/resources/db/migration/v1_initialize/v1.1_create_roles.sql",
@@ -30,6 +22,7 @@ java_library(
     ],
     visibility = ["//visibility:public"],
     deps = [
+        ":lombok",
         "@maven//:ch_qos_logback_logback_classic_1_4_5",
         "@maven//:ch_qos_logback_logback_core_1_4_5",
         "@maven//:com_fasterxml_classmate_1_5_1",
@@ -107,7 +100,7 @@ java_library(
         "@maven//:org_objenesis_objenesis_3_2",
         "@maven//:org_opentest4j_opentest4j_1_2_0",
         "@maven//:org_ow2_asm_asm_9_1",
-        "@maven//:org_projectlombok_lombok_1_18_24",
+        "@maven//:org_projectlombok_lombok_1_18_26",
         "@maven//:org_reactivestreams_reactive_streams_1_0_4",
         "@maven//:org_skyscreamer_jsonassert_1_5_1",
         "@maven//:org_slf4j_jul_to_slf4j_2_0_4",
@@ -125,7 +118,8 @@ java_library(
         "@maven//:org_springframework_boot_spring_boot_starter_reactor_netty_3_0_0",
         "@maven//:org_springframework_boot_spring_boot_starter_test_3_0_0",
         "@maven//:org_springframework_boot_spring_boot_starter_validation_3_0_0",
-        "@maven//:org_springframework_boot_spring_boot_starter_webflux_3_0_0",
+        "@maven//:org_springframework_boot_spring_boot_starter_web_3_0_0",
+        # "@maven//:org_springframework_boot_spring_boot_starter_webflux_3_0_0",
         "@maven//:org_springframework_boot_spring_boot_test_3_0_0",
         "@maven//:org_springframework_boot_spring_boot_test_autoconfigure_3_0_0",
         "@maven//:org_springframework_data_spring_data_commons_3_0_0",

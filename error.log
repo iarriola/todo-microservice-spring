@@ -1,134 +1,19 @@
-bazel build //:todo-microservice >> error.log
-Loading:
-Loading:
-Loading: 0 packages loaded
-Analyzing: target //:todo-microservice (0 packages loaded, 0 targets configured)
-INFO: Analyzed target //:todo-microservice (0 packages loaded, 0 targets configured).
-INFO: Found 1 target...
-[0 / 1] [Prepa] BazelWorkspaceStatusAction stable-status.txt
-ERROR: /home/iarriola/.workspace/todo-microservice-spring/BUILD:13:13: Building libtodo-microservice-lib-class.jar (20 source files) failed: (Exit 1): java failed: error executing command (from target //:todo-microservice-lib) external/remotejdk17_linux/bin/java '--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED' '--add-exports=jdk.compiler/com.sun.tools.javac.main=ALL-UNNAMED' ... (remaining 16 arguments skipped)
-src/main/java/com/incode/todo/services/TaskService.java:108: error: cannot find symbol
-                .deleteById(entity.getUuid())
-                                  ^
-  symbol:   method getUuid()
-  location: variable entity of type TaskEntity
-src/main/java/com/incode/todo/services/TaskMapper.java:25: error: cannot find symbol
-    return TaskResponse.builder().id(entity.getUuid()).title(entity.getTitle())
-                       ^
-  symbol:   method builder()
-  location: class TaskResponse
-src/main/java/com/incode/todo/services/TaskMapper.java:25: error: cannot find symbol
-    return TaskResponse.builder().id(entity.getUuid()).title(entity.getTitle())
-                                           ^
-  symbol:   method getUuid()
-  location: variable entity of type TaskEntity
-src/main/java/com/incode/todo/services/TaskMapper.java:25: error: cannot find symbol
-    return TaskResponse.builder().id(entity.getUuid()).title(entity.getTitle())
-                                                                   ^
-  symbol:   method getTitle()
-  location: variable entity of type TaskEntity
-src/main/java/com/incode/todo/services/TaskMapper.java:26: error: cannot find symbol
-        .description(entity.getDescription()).createdAt(entity.getCreatedAt())
-                           ^
-  symbol:   method getDescription()
-  location: variable entity of type TaskEntity
-src/main/java/com/incode/todo/services/TaskMapper.java:26: error: cannot find symbol
-        .description(entity.getDescription()).createdAt(entity.getCreatedAt())
-                                                              ^
-  symbol:   method getCreatedAt()
-  location: variable entity of type TaskEntity
-src/main/java/com/incode/todo/services/TaskMapper.java:27: error: cannot find symbol
-        .completedAt(entity.getCompletedAt()).deletedAt(entity.getDeletedAt()).build();
-                           ^
-  symbol:   method getCompletedAt()
-  location: variable entity of type TaskEntity
-src/main/java/com/incode/todo/services/TaskMapper.java:27: error: cannot find symbol
-        .completedAt(entity.getCompletedAt()).deletedAt(entity.getDeletedAt()).build();
-                                                              ^
-  symbol:   method getDeletedAt()
-  location: variable entity of type TaskEntity
-src/main/java/com/incode/todo/services/TaskMapper.java:36: error: cannot find symbol
-    return List.of(TaskResponse.builder().id(entity.getUuid()).title(entity.getTitle())
-                               ^
-  symbol:   method builder()
-  location: class TaskResponse
-src/main/java/com/incode/todo/services/TaskMapper.java:36: error: cannot find symbol
-    return List.of(TaskResponse.builder().id(entity.getUuid()).title(entity.getTitle())
-                                                   ^
-  symbol:   method getUuid()
-  location: variable entity of type TaskEntity
-src/main/java/com/incode/todo/services/TaskMapper.java:36: error: cannot find symbol
-    return List.of(TaskResponse.builder().id(entity.getUuid()).title(entity.getTitle())
-                                                                           ^
-  symbol:   method getTitle()
-  location: variable entity of type TaskEntity
-src/main/java/com/incode/todo/services/TaskMapper.java:37: error: cannot find symbol
-        .description(entity.getDescription()).createdAt(entity.getCreatedAt())
-                           ^
-  symbol:   method getDescription()
-  location: variable entity of type TaskEntity
-src/main/java/com/incode/todo/services/TaskMapper.java:37: error: cannot find symbol
-        .description(entity.getDescription()).createdAt(entity.getCreatedAt())
-                                                              ^
-  symbol:   method getCreatedAt()
-  location: variable entity of type TaskEntity
-src/main/java/com/incode/todo/services/TaskMapper.java:38: error: cannot find symbol
-        .completedAt(entity.getCompletedAt()).deletedAt(entity.getDeletedAt()).build());
-                           ^
-  symbol:   method getCompletedAt()
-  location: variable entity of type TaskEntity
-src/main/java/com/incode/todo/services/TaskMapper.java:38: error: cannot find symbol
-        .completedAt(entity.getCompletedAt()).deletedAt(entity.getDeletedAt()).build());
-                                                              ^
-  symbol:   method getDeletedAt()
-  location: variable entity of type TaskEntity
-src/main/java/com/incode/todo/services/TaskMapper.java:46: error: cannot find symbol
-    return TaskEntity.builder().title(model.title()).description(model.description()).build();
-                     ^
-  symbol:   method builder()
-  location: class TaskEntity
-src/main/java/com/incode/todo/services/TaskMapper.java:50: error: cannot find symbol
-    return TaskEntity.builder().uuid(UUID.fromString(id)).build();
-                     ^
-  symbol:   method builder()
-  location: class TaskEntity
-src/main/java/com/incode/todo/services/TaskMapper.java:63: error: cannot find symbol
-    ObjectsUtils.applyObjectChange(model.title(), entity.getTitle())
-                                                        ^
-  symbol:   method getTitle()
-  location: variable entity of type TaskEntity
-src/main/java/com/incode/todo/services/TaskMapper.java:66: error: cannot find symbol
-    ObjectsUtils.applyObjectChange(model.description(), entity.getDescription())
-                                                              ^
-  symbol:   method getDescription()
-  location: variable entity of type TaskEntity
-src/main/java/com/incode/todo/services/TaskMapper.java:76: error: cannot find symbol
-      entity.setCompletedAt(ZonedDateTime.now());
-            ^
-  symbol:   method setCompletedAt(ZonedDateTime)
-  location: variable entity of type TaskEntity
-src/main/java/com/incode/todo/services/TaskMapper.java:78: error: cannot find symbol
-      entity.setCompletedAt(null);
-            ^
-  symbol:   method setCompletedAt(<null>)
-  location: variable entity of type TaskEntity
-src/main/java/com/incode/todo/services/TaskMapper.java:88: error: cannot find symbol
-    entity.setDeletedAt(ZonedDateTime.now());
-          ^
-  symbol:   method setDeletedAt(ZonedDateTime)
-  location: variable entity of type TaskEntity
-src/main/java/com/incode/todo/services/TaskMapper.java:93: error: cannot find symbol
-    return model.getDeletedAt() == null;
-                ^
-  symbol:   method getDeletedAt()
-  location: variable model of type TaskEntity
-src/main/java/com/incode/todo/utils/HttpUtils.java:54: error: cannot find symbol
-        .body(BodyInserters.fromValue(AppResponseBody.builder()
-                                                     ^
-  symbol:   method builder()
-  location: class AppResponseBody
-Target //:todo-microservice failed to build
-Use --verbose_failures to see the command lines of failed build steps.
-INFO: Elapsed time: 0.620s, Critical Path: 0.52s
-INFO: 2 processes: 2 internal.
-FAILED: Build did NOT complete successfully
+2023-04-26T22:17:15.425-05:00  INFO 25811 --- [           main] com.incode.todo.Application              : Starting Application using Java 17.0.5 with PID 25811 (/home/iarriola/.cache/bazel/_bazel_iarriola/10135202b7bdba8ded3e684c72539c7e/execroot/__main__/bazel-out/k8-fastbuild/bin/todo-microservice_deploy.jar started by iarriola in /home/iarriola/.workspace/todo-microservice-spring)
+2023-04-26T22:17:15.429-05:00 DEBUG 25811 --- [           main] com.incode.todo.Application              : Running with Spring Boot, Spring
+2023-04-26T22:17:15.430-05:00  INFO 25811 --- [           main] com.incode.todo.Application              : No active profile set, falling back to 1 default profile: "default"
+2023-04-26T22:17:16.117-05:00  WARN 25811 --- [           main] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Unable to start web server
+2023-04-26T22:17:16.132-05:00 ERROR 25811 --- [           main] o.s.b.d.LoggingFailureAnalysisReporter   : 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Web application could not be started as there was no org.springframework.boot.web.servlet.server.ServletWebServerFactory bean defined in the context.
+
+Action:
+
+Check your application's dependencies for a supported servlet web server.
+Check the configured web application type.
+
