@@ -11,6 +11,14 @@ http_archive(
     url = "https://github.com/bazelbuild/rules_jvm_external/archive/%s.zip" % RULES_JVM_EXTERNAL_TAG,
 )
 
+http_archive(
+    name = "rules_spring",
+    sha256 = "7495e33261e4e69777a611e42c2e7a4f45021f6a8bb1eae1b064ca5653a61835",
+    urls = [
+        "https://github.com/salesforce/rules_spring/releases/download/2.2.2/rules-spring-2.2.2.zip",
+    ],
+)
+
 load("@rules_jvm_external//:repositories.bzl", "rules_jvm_external_deps")
 
 rules_jvm_external_deps()
@@ -20,20 +28,6 @@ load("@rules_jvm_external//:setup.bzl", "rules_jvm_external_setup")
 rules_jvm_external_setup()
 
 load("@rules_jvm_external//:defs.bzl", "maven_install")
-
-# maven_install(
-#     maven_install_json = "//:maven_install.json",
-#     repositories = [
-#         "m2Local",
-#         "https://repo1.maven.org/maven2",
-#         "https://repo.spring.io/snapshot",
-#         "https://repo.spring.io/milestone",
-#     ],
-# )
-
-# load("@maven//:defs.bzl", "pinned_maven_install")
-
-# pinned_maven_install()
 
 maven_install(
     artifacts = [
@@ -119,6 +113,7 @@ maven_install(
         "org.skyscreamer:jsonassert:1.5.1",
         "org.slf4j:jul-to-slf4j:2.0.4",
         "org.slf4j:slf4j-api:2.0.4",
+        "org.springframework.boot:spring-boot-loader:3.0.0",
         "org.springframework.boot:spring-boot:3.0.0",
         "org.springframework.boot:spring-boot-actuator:3.0.0",
         "org.springframework.boot:spring-boot-actuator-autoconfigure:3.0.0",
@@ -154,10 +149,13 @@ maven_install(
         "org.yaml:snakeyaml:1.33",
     ],
     fetch_sources = True,
+    maven_install_json = "//:maven_install.json",
     repositories = [
-        "m2Local",
         "https://repo1.maven.org/maven2",
-        "https://repo.spring.io/snapshot",
-        "https://repo.spring.io/milestone",
     ],
+    version_conflict_policy = "pinned",
 )
+
+load("@maven//:defs.bzl", "pinned_maven_install")
+
+pinned_maven_install()

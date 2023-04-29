@@ -1,6 +1,8 @@
 #!/bin/bash
 
-java -jar bazel-bin/todo-microservice_deploy.jar >> error.log 2>&1 &
+# java -jar bazel-bin/todo-microservice-app.jar 
+java -jar bazel-bin/todo-microservice.jar
+# >> error.log 2>&1 &
 
 # OR
 

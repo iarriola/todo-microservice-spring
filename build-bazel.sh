@@ -2,4 +2,6 @@
 
 bazel clean --expunge
 
-bazel build //:todo-microservice_deploy.jar
+# bazel build //:todo-microservice-app
+
+bazel build //:todo-microservice
