@@ -41,3 +41,7 @@ A simple microservice with Java and Spring Boot
 * [bookingcom/rules_lombok_java_library: Bazel rules that apply delombok over your code so it can be properly passed to java_library (github.com)](https://github.com/bookingcom/rules_lombok_java_library)
 * [Lombok Bazel and Java 17 (google.com)](https://groups.google.com/g/bazel-discuss/c/folhCqueNZA)
 * [WORKING- Java 9 compiler breaks Project Lombok ](https://groups.google.com/g/bazel-discuss/c/ZRWdqJfYEPw/m/4pYq884kIQAJ)
+
+#### Bazel and Docker
+
+* [Create Container images with Bazel - DEV Community](https://dev.to/schoren/create-container-images-with-bazel-47am)
