@@ -21,6 +21,20 @@ rules_jvm_external_setup()
 
 load("@rules_jvm_external//:defs.bzl", "maven_install")
 
+# maven_install(
+#     maven_install_json = "//:maven_install.json",
+#     repositories = [
+#         "m2Local",
+#         "https://repo1.maven.org/maven2",
+#         "https://repo.spring.io/snapshot",
+#         "https://repo.spring.io/milestone",
+#     ],
+# )
+
+# load("@maven//:defs.bzl", "pinned_maven_install")
+
+# pinned_maven_install()
+
 maven_install(
     artifacts = [
         "ch.qos.logback:logback-classic:1.4.5",
@@ -118,8 +132,7 @@ maven_install(
         "org.springframework.boot:spring-boot-starter-reactor-netty:3.0.0",
         "org.springframework.boot:spring-boot-starter-test:3.0.0",
         "org.springframework.boot:spring-boot-starter-validation:3.0.0",
-        # "org.springframework.boot:spring-boot-starter-webflux:3.0.0",
-        "org.springframework.boot:spring-boot-starter-web:3.0.0",
+        "org.springframework.boot:spring-boot-starter-webflux:3.0.0",
         "org.springframework.boot:spring-boot-test:3.0.0",
         "org.springframework.boot:spring-boot-test-autoconfigure:3.0.0",
         "org.springframework.data:spring-data-commons:3.0.0",
@@ -140,6 +153,7 @@ maven_install(
         "org.xmlunit:xmlunit-core:2.9.0",
         "org.yaml:snakeyaml:1.33",
     ],
+    fetch_sources = True,
     repositories = [
         "m2Local",
         "https://repo1.maven.org/maven2",
