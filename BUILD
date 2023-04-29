@@ -1,7 +1,6 @@
 load("@rules_spring//springboot:springboot.bzl", "springboot")
 
 springboot_deps = [
-    # "//springboot/import_bundles:springboot_required_deps",
     "@maven//:org_springframework_boot_spring_boot_loader_3_0_0",
     "@maven//:org_springframework_boot_spring_boot_3_0_0",
     "@maven//:org_springframework_boot_spring_boot_actuator_3_0_0",
@@ -169,14 +168,6 @@ java_test(
     test_class = "com.incode.todo.ApplicationTests",
     deps = [":todo-microservice-lib"] + springboot_test_deps + test_deps,
 )
-
-# java_binary(
-#     name = "todo-microservice",
-#     main_class = "com.incode.todo.Application",
-#     runtime_deps = [
-#         ":todo-microservice-lib",
-#     ],
-# )
 
 springboot(
     name = "todo-microservice",
